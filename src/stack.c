@@ -1,85 +1,93 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   stack.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lcarmelo <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/26 16:16:56 by lcarmelo          #+#    #+#             */
-/*   Updated: 2020/02/26 19:12:59 by lcarmelo         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "push_swap.h"
+#include <stdio.h>
 
-void        stack_init(t_stack *stack, size_t size, size_t element_size)
+void        stack_swap(t_stack *a, t_stack *b)
 {
-    vector_init(stack, size, element_size); 
-}
-
-void        stack_push(t_stack *stack, void *data)
-{
-    vector_push_back_data(stack, data);
-}
-
-void        stack_swap(t_stack *stack_a, t_stack *stack_b)
-{
-    if (vector_is_initialized(stack_a))
+    if (stack_is_initialized(a))
     {
-        ft_memswap(vector_get_element(stack_a, stack_a->size - 1),
-                    vector_get_element(stack_a, stack_a->size - 2),
-                    stack_a->element_size);
+        ft_memswap(stack_get_element(a, a->size - 1),
+                    stack_get_element(a, a->size - 2),
+                    a->element_size);
     }
-    if (vector_is_initialized(stack_b))
+    if (stack_is_initialized(b))
     {
-        ft_memswap(vector_get_element(stack_b, stack_b->size - 1),
-                vector_get_element(stack_b, stack_b->size - 2),
-                stack_b->element_size);
+        ft_memswap(stack_get_element(b, b->size - 1),
+                stack_get_element(b, b->size - 2),
+                b->element_size);
     }
 }
 
-void        stack_rotate(t_stack *stack_a, t_stack *stack_b)
+void        stack_rotate(t_stack *a, t_stack *b)
 {
     void    *tmp;
 
-    if (vector_is_initialized(stack_a))
+    if (stack_is_initialized(b))
     {
-        tmp = vector_pop_back(stack_a);
-        vector_push_front_data(stack_a, tmp);
+        tmp = stack_pop(a);
+        vector_push_front_data(a, tmp);
     }
-    if (vector_is_initialized(stack_b))
+    if (stack_is_initialized(b))
     {
-        tmp = vector_pop_back(stack_b);
-        vector_push_front_data(stack_b, tmp);
+        tmp = stack_pop(b);
+        vector_push_front_data(b, tmp);
     }
 }
 
-void        stack_reverse(t_stack *stack_a, t_stack *stack_b)
+void        stack_reverse(t_stack *a, t_stack *b)
 {
     void    *tmp;
 
-    if (vector_is_initialized(stack_a))
+    if (stack_is_initialized(a))
     {
-        tmp = vector_pop_front(stack_a);
-        vector_push_back_data(stack_a, tmp);
+        tmp = vector_pop_front(a);
+        stack_push(a, tmp);
     }
-    if (vector_is_initialized(stack_b))
+    if (stack_is_initialized(b))
     {
-        tmp = vector_pop_front(stack_b);
-        vector_push_back_data(stack_b, tmp);
+        tmp = vector_pop_front(b);
+        stack_push(b, tmp);
     }
 }
 
 int         stack_is_sorted(t_stack *stack)
 {
-    void    *data;
     size_t  size;
 
     size = stack->size;
     while (--size > 0)
     {
-        if (*(int *)vector_get_element(stack, size) < *(int *)vector_get_element(stack, size - 1))
+        if (*(int *)stack_get_element(stack, size) < *(int *)stack_get_element(stack, size - 1))
             return (FALSE);
     }
     return (TRUE);
+}
+
+static void stack_print(t_stack *a, t_stack *b)
+{
+    if (!stack_is_empty(a) && !stack_is_empty(b))
+    {
+        for (int i = (int)a->size - 1; i >= 0; i--)
+        {
+            printf("%d\n", *(int *)stack_get_element(a, i));
+        }
+    }
+}
+
+void    stack_quick_sort(t_stack *a, t_stack *b)
+{
+    int median;    
+    
+    median = *(int *)stack_get_element(a, a->size >> 1);
+    while (!stack_is_sorted(a))
+    {
+       if (median < *(int *)stack_top(a))
+           stack_rotate(a, NULL);
+       else if (median > *(int *)stack_top(a))
+           stack_move_data(b, stack_pop(a));
+       else 
+            median = *(int *)stack_get_element(a, a->size >> 1);
+        stack_print(a, b);
+    }
+    while (!stack_is_empty(b))
+        stack_move_data(a, stack_pop(b));
 }
