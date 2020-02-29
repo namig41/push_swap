@@ -3,13 +3,14 @@
 
 int         stack_is_sorted(t_stack *stack)
 {
-    size_t  size;
+    size_t i;
 
-    size = stack->size;
-    while (--size > 0)
+    i = 0;
+    while (i < stack->size - 1)
     {
-        if (*(int *)stack_get_element(stack, size) < *(int *)stack_get_element(stack, size - 1))
+        if (*(int *)stack_get_element(stack, i) < *(int *)stack_get_element(stack, i + 1))
             return (FALSE);
+        i++;
     }
     return (TRUE);
 }
@@ -30,38 +31,7 @@ void stack_print(t_stack *stack)
     }
 }
 
-static int get_max(t_stack *stack)
-{
-    int max;
-    size_t i;
-
-    i = 0;
-    max = 0;
-    while (i < stack->size)
-    {
-        max = ft_max_l(max, *(int *)stack_get_element(stack, i));
-        i++;
-    }
-    return (max);
-}
-
-static int get_min(t_stack *stack)
-{
-    int min;
-    size_t i;
-
-    i = 0;
-    min = 10000;
-    while (i < stack->size)
-    {
-        min = ft_min_l(min, *(int *)stack_get_element(stack, i));
-        i++;
-    }
-    return (min);
-}
-
-
-void    stack_quick_sort(t_stack *a, t_stack *b)
+void    sort(t_stack *a, t_stack *b)
 {
     int max;
     int i;
@@ -69,13 +39,11 @@ void    stack_quick_sort(t_stack *a, t_stack *b)
     max = 0;
     if (!stack_is_empty(a))
     {
-        stack_print(a);
         max = *(int *)stack_top(a);
         ph(b, a);
         while (!stack_is_empty(a))
         {
             i = 0;
-            stack_print(b);
             if (*(int *)stack_top(a) > max)  
             {
                 max = *(int *)stack_top(a);
@@ -99,6 +67,105 @@ void    stack_quick_sort(t_stack *a, t_stack *b)
                 rrr(b, NULL);
                 i--;
             }
+        }
+    }
+}
+
+static int get_median(t_stack *stack)
+{
+   int max; 
+   int min;
+   size_t i;
+
+   max = 0;
+   min = 100000;
+   i = 0;
+   while (i < stack->size)
+   {
+        max = ft_max(max, *(int *)stack_get_element(stack, stack->size - i - 1));
+        min = ft_min(min, *(int *)stack_get_element(stack, stack->size - i - 1));
+        i++;
+   }
+   return ((max + min) >> 1);
+}
+
+
+static int get_max(t_stack *stack, size_t size)
+{
+   int max; 
+   size_t i;
+
+   max = 0;
+   i = 0;
+   while (i < size)
+   {
+        max = ft_max(max, *(int *)stack_get_element(stack, stack->size - i - 1));
+        i++;
+   }
+   return (max);
+}
+
+void sort2(t_stack *a, t_stack *b)
+{
+    t_stack tmp;
+    int med;
+    int max;
+    size_t i;
+    size_t j;
+    size_t count;
+    size_t *size;
+
+    stack_init(&tmp, 1, sizeof(size_t));
+    if (!stack_is_empty(a))
+    {
+        while (a->size > 2)
+        {
+            i = 0;
+            count = 0;
+            med = get_median(a); 
+            while (i < a->size + count)
+            {
+                if (med <= *(int *)stack_top(a))
+                    rr(a, NULL);
+                else
+                {
+                    ph(b, a);
+                    count++;
+                }
+                i++;
+            }
+            stack_push(&tmp, &count);
+        }
+        if (!stack_is_sorted(a))
+            ss(a, NULL); 
+        while (!stack_is_empty(&tmp))
+        {
+            i = 0;
+            count = 0;
+            size = (size_t *)stack_pop(&tmp);
+            max = get_max(b, *size); 
+            while (i < *size)
+            {
+                if (*(int *)stack_top(b) == max)
+                {
+                    ph(a, b);
+                    i++;
+                    j = 0;
+                    while (j < count)
+                    {
+                        rrr(b, NULL);
+                        j++;
+                    }
+                    max = get_max(b, *size - i); 
+                    count = 0;
+                }
+                else
+                {
+                    rr(b, NULL);
+                    count++;
+                }
+            }
+            ft_memdel((void **)&size);
         }
     }
 }
