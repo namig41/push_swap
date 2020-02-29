@@ -19,8 +19,11 @@ int main(void)
     }
 
 
-    stack_quick_sort(&a, &b);
+    sort2(&a, &b);
+    //sort(&a, &b);
 
+    stack_print(&a);
+    printf("\n\n\n%d", g_count);
     //while (!stack_is_empty(&a))
     //{
     //    data = stack_pop(&a); 

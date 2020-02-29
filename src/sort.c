@@ -75,6 +75,7 @@ static int get_median(t_stack *stack)
 {
    int max; 
    int min;
+   int med;
    size_t i;
 
    max = 0;
@@ -86,7 +87,13 @@ static int get_median(t_stack *stack)
         min = ft_min(min, *(int *)stack_get_element(stack, stack->size - i - 1));
         i++;
    }
-   return ((max + min) >> 1);
+   if (stack->size >= 100)
+   {
+       med = (max + min) >> 2;
+   }
+   else
+       med = (max + min) >> 1;
+   return (med);
 }
 
 
@@ -114,6 +121,7 @@ void sort2(t_stack *a, t_stack *b)
     size_t j;
     size_t count;
     size_t *size;
+    int l;
 
     stack_init(&tmp, 1, sizeof(size_t));
     if (!stack_is_empty(a))
@@ -129,15 +137,60 @@ void sort2(t_stack *a, t_stack *b)
                     rr(a, NULL);
                 else
                 {
-                    ph(b, a);
+                    if (stack_is_empty(b))
+                        ph(b, a);
+                    else if (stack_is_empty(&tmp))
+                    {
+                        j = 0;
+                        if (*(int *)stack_top(a) >= *(int *)stack_top(b))  
+                            ph(b, a);
+                        else
+                        {
+                            if (*(int *)stack_top(a) < *(int *)stack_get_element(b, 0))
+                            {
+                                ph(b, a);
+                                if (med <= *(int *)stack_top(a))
+                                    rrr(a, b);
+                                else
+                                    rr(b, NULL);
+                            }
+                            else
+                            {
+                                while (*(int *)stack_top(a) < *(int *)stack_top(b))
+                                {
+                                    if (med <= *(int *)stack_top(a))
+                                        rrr(a, b);
+                                    else
+                                        rr(b, NULL);
+                                    l++;
+                                }
+                                ph(b, a);
+                                while (l > 0)
+                                {
+                                    rrr(b, NULL);
+                                    l--;
+                                }
+                            }
+                        }
+                    }
+                    else if (*(int *)stack_top(b) > *(int *)stack_top(a))
+                    {
+                        ph(b, a);
+                        ss(b, NULL);
+                    }
+                    else
+                        ph(b, a);
+
                     count++;
                 }
                 i++;
             }
             stack_push(&tmp, &count);
         }
+        printf("count = %d\n\n", g_count);
         if (!stack_is_sorted(a))
             ss(a, NULL); 
+        stack_print(b);
         while (!stack_is_empty(&tmp))
         {
             i = 0;
@@ -148,6 +201,20 @@ void sort2(t_stack *a, t_stack *b)
             {
                 if (*(int *)stack_top(b) == max)
                 {
+                    ph(a, b);
+                    i++;
+                    j = 0;
+                    while (j < count)
+                    {
+                        rrr(b, NULL);
+                        j++;
+                    }
+                    max = get_max(b, *size - i); 
+                    count = 0;
+                }
+                else if (b->size >= 2 && *(int *)stack_get_element(b, b->size - 2) == max)
+                {
+                    ss(b, NULL);
                     ph(a, b);
                     i++;
                     j = 0;

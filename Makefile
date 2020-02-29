@@ -6,7 +6,7 @@
 #    By: lcarmelo <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/28 19:59:15 by lcarmelo          #+#    #+#              #
-#    Updated: 2020/02/28 20:44:34 by lcarmelo         ###   ########.fr        #
+#    Updated: 2020/02/29 16:43:10 by lcarmelo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ OBJ_PUSH_SWAP 	= $(addsuffix .o, $(FUN_NAME))
 CC 	   			= gcc
 NAME 			= push_swap
 #CFLAGS 	   		= -Wall -Werror -Wextra -O2 -I$(DIR_INC) -I$(DIR_LIB)$(DIR_INC)
-CFLAGS 	   		=  -O2 libft.a -I$(DIR_INC) -I$(DIR_LIB)$(DIR_INC)
+CFLAGS 	   		=  -O2 -I$(DIR_INC) -I$(DIR_LIB)$(DIR_INC)
 
 all: $(NAME)
 

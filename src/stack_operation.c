@@ -5,8 +5,7 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lcarmelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/28 19:33:25 by lcarmelo          #+#    #+#             */
-/*   Updated: 2020/02/28 21:02:12 by lcarmelo         ###   ########.fr       */
+/*   Created: 2020/02/28 19:33:25 by lcarmelo          #+#    #+#             */ /*   Updated: 2020/02/29 19:51:37 by lcarmelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +25,7 @@ void        ss(t_stack *a, t_stack *b)
                     stack_get_element(b, b->size - 2),
                     b->element_size);
     }
+    g_count++;
 }
 
 void        rr(t_stack *a, t_stack *b)
@@ -42,6 +42,7 @@ void        rr(t_stack *a, t_stack *b)
         tmp = stack_pop(b);
         vector_push_front_data(b, tmp);
     }
+    g_count++;
 }
 
 void        rrr(t_stack *a, t_stack *b)
@@ -58,6 +59,7 @@ void        rrr(t_stack *a, t_stack *b)
         tmp = vector_pop_front(b);
         stack_push(b, tmp);
     }
+    g_count++;
 }
 
 void    ph(t_stack *a, t_stack *b)
@@ -70,5 +72,6 @@ void    ph(t_stack *a, t_stack *b)
         stack_push(a, data);
         ft_memdel(&data);
     }
+    g_count++;
 }
 
