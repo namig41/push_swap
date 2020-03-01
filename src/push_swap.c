@@ -1,6 +1,5 @@
 #include "push_swap.h"
-#include <stdio.h>
-
+# include <stdio.h>
 
 int main(void)
 {
@@ -14,16 +13,16 @@ int main(void)
 
     for (int i = 0; i < 100; i++)
     {
-        ran = (int)ft_random(100);
+        ran = (int)ft_random(10000);
         stack_push(&a, &ran);
     }
 
 
     sort2(&a, &b);
-    //sort(&a, &b);
 
-    stack_print(&a);
-    printf("\n\n\n%d", g_count);
+    //stack_print(&a);
+    //printf("\count = %d\n", g_count);
+    //printf("\n\n\n%d", g_count);
     //while (!stack_is_empty(&a))
     //{
     //    data = stack_pop(&a); 

@@ -5,8 +5,7 @@
 #                                                     +:+ +:+         +:+      #
 #    By: lcarmelo <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/02/28 19:59:15 by lcarmelo          #+#    #+#              #
-#    Updated: 2020/02/29 16:43:10 by lcarmelo         ###   ########.fr        #
+#    Created: 2020/02/28 19:59:15 by lcarmelo          #+#    #+#              # #    Updated: 2020/02/29 16:43:10 by lcarmelo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,8 +36,8 @@ lib:
 	@cp libft/libft.a ./
 
 $(NAME): lib obj  
-	@$(CC) $(CFLAGS) libft.a $(OBJ_PUSH_SWAP) -o $(NAME)
-
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ_PUSH_SWAP) libft/libft.a
+ 
 clean:
 	@make clean -C $(DIR_LIB)
 	@rm -f $(OBJ_PUSH_SWAP)
