@@ -119,54 +119,67 @@ static void sort_insert(t_stack *a, t_stack *b, int mean)
     l = 0;
     if (*(int *)stack_top(a) >= *(int *)stack_top(b)) 
         ph(b, a);
-    else
+    else if (*(int *)stack_top(a) <= *(int *)stack_get_element(b, 0))
     {
-        if (*(int *)stack_top(a) < *(int *)stack_get_element(b, 0))
+        ph(b, a);
+        while (*(int *)stack_top(b) == *(int *)stack_top(a))
         {
             ph(b, a);
-            rr(b, NULL);
+            j++;
+        }
+        while (j >= 0)
+        {
+            if (mean <= *(int *)stack_top(a))
+                rr(a, b);
+            else
+                rr(b, NULL);
+            j--;
+        }
+    }
+    else
+    {
+        tmp = stack_pop(a);
+        median = get_median(b, b->size >> 1);
+        if (*(int *)tmp >= median)
+        {
+            while (*(int *)tmp < *(int *)stack_top(b))
+            {
+                if (mean <= *(int *)stack_top(a))
+                    rr(a, b);
+                else
+                    rr(b, NULL);
+                l++;
+            }
+            //while (*(int *)stack_top(a) == *(int *)stack_top(b))
+            while (*(int *)stack_top(a) == *(int *)tmp || *(int *)stack_top(a) == *(int *)stack_top(b))
+                ph(b, a);
+            stack_push(b, tmp);
+            ft_memdel((void **)&tmp);
+            while (l > 0)
+            {
+                rrr(b, NULL);
+                l--;
+            }
         }
         else
         {
-            tmp = stack_pop(a);
-            median = *(int *)stack_get_element(a, a->size >> 1);
-            if (*(int *)tmp >= median)
+            while (*(int *)tmp > *(int *)stack_get_element(b, 0))
             {
-                while (*(int *)tmp < *(int *)stack_top(b))
-                {
-                    if (mean <= *(int *)stack_top(a))
-                        rr(a, b);
-                    else
-                        rr(b, NULL);
-                    l++;
-                }
-                while (*(int *)stack_top(b) == *(int *)stack_top(a))
-                    ph(b, a);
-                stack_push(b, tmp);
-                ft_memdel((void **)&tmp);
-                while (l > 0)
-                {
-                    rrr(b, NULL);
-                    l--;
-                }
-            }
-            else
-            {
-                while (*(int *)tmp > *(int *)stack_get_element(b, 0))
-                {
-                    rrr(b, NULL);
-                    l++;
-                }
+                rrr(b, NULL);
                 l++;
-                stack_push(b, tmp);
-                while (*(int *)stack_top(b) == *(int *)stack_top(a))
-                    ph(b, a);
-                ft_memdel((void **)&tmp);
-                while (l > 0)
-                {
-                    rr(b, NULL);
-                    l--;
-                }
+            }
+            //while (*(int *)stack_top(a) == *(int *)stack_top(b))
+            while (*(int *)stack_top(a) == *(int *)tmp || *(int *)stack_top(a) == *(int *)stack_top(b))
+            {
+                ph(b, a);
+                l++;
+            }
+            stack_push(b, tmp);
+            ft_memdel((void **)&tmp);
+            while (l >= 0)
+            {
+                rr(b, NULL);
+                l--;
             }
         }
     }
@@ -186,46 +199,88 @@ static size_t get_max_i(t_vector *vec, int max)
     return (0);
 }
 
+int get_median(t_vector *vector, size_t med)
+{
+    size_t i;
+    int pivot; 
+    int tmp;
+    t_vector lows;
+    t_vector pivots;
+    t_vector highs;
+
+    i = 0;
+    if (vector->size == 1)
+        tmp = *(int *)vector_get_element(vector, 0);
+    else
+    {
+        vector_init(&lows, 1, sizeof(int));
+        vector_init(&highs, 1, sizeof(int));
+        vector_init(&pivots, 1, sizeof(int));
+        pivot = *(int *)vector_get_element(vector, ft_random(vector->size - 1));
+        while (i < vector->size)
+        {   
+            tmp = *(int *)vector_get_element(vector, i);
+            if (tmp < pivot)
+                vector_push_back_data(&lows, &tmp);
+            else if (tmp == pivot)
+                vector_push_back_data(&pivots, &tmp);
+            else
+                vector_push_back_data(&highs, &tmp);
+            i++;
+        }
+        if (med < lows.size)
+           tmp = get_median(&lows, med);
+        else if (med < lows.size + pivots.size)
+            return (pivot);
+        else
+            tmp = get_median(&highs, med - lows.size - pivots.size);
+        vector_destroy(&lows);
+        vector_destroy(&highs);
+        vector_destroy(&pivots);
+    }
+    return (tmp);
+}
+
 void sort2(t_stack *a, t_stack *b)
 {
-    int mean;
+    int median;
     int max;
-    size_t i;
+    int i;
     size_t j;
     size_t count;
-    int flag;
+    t_stack tmp;
 
-    flag = 1;
-    printf("mean = %d\n", get_mean(a, INT_MAX));
-    printf("disp = %d\n", get_disp(a, INT_MAX));
+    i = 0;
+    stack_init(&tmp, 1, sizeof(size_t));
     if (!stack_is_empty(a))
     {
         while (a->size > 2)
         {
             i = 0;
             count = 0;
-            mean = get_mean(a, INT_MAX); 
-            //if (stack_is_empty(b))
-                //mean >>= 2;
-
-            //printf("disp = %d\n", get_disp(a, mean));
-            //printf("disp = %d\n", get_mean(a, mean));
-            //printf("mean = %d\n", mean);
+            median = get_median(a, a->size / 15); 
             while (i < a->size + count)
             {
-                if (mean < *(int *)stack_top(a))
+                if (median < *(int *)stack_top(a))
+                {
                     rr(a, NULL);
+                    i++;
+                }
                 else
                 {
                     if (stack_is_empty(b))
                         ph(b, a);
                     //else if (flag)
                     //{
-                    //    sort_insert(a, b, mean);
+                    //    sort_insert(a, b, median);
                     //}
                     else if (*(int *)stack_top(b) > *(int *)stack_top(a))
                     {
                         ph(b, a);
+                        //if (a->size > 2 && *(int *)stack_get_element(a, a->size - 2) > *(int *)stack_top(a))
+                        //    ss(a, b);
+                        //else
+                        //    ss(b, NULL);
                         ss(b, NULL);
                     }
                     else
@@ -234,12 +289,12 @@ void sort2(t_stack *a, t_stack *b)
                 }
                 i++;
             }
-            flag = 0;
-            //stack_print(b);
+            stack_push(&tmp, &count);
         }
-        //stack_print(b);
-        //printf("count = %d\n\n", g_count);
-        printf("count = %d\n", g_count);
+        stack_print(&tmp);
+        stack_print(b);
+        printf("count = %d\n\n", g_count);
+        //printf("1 part: count = %d\n", g_count);
         if (!stack_is_empty(a) && !stack_is_sorted(a))
             ss(a, NULL); 
         count = 0;
@@ -266,12 +321,11 @@ void sort2(t_stack *a, t_stack *b)
                     {
                         ph(a, b);
                         if (stack_is_empty(b))
-                            break ;
+                           return ;
                     }
                     if (get_max_i(b, max) > b->size >> 1)
                         break ;
                 }
-                //count = 0;
             }
             else
             {
@@ -279,8 +333,8 @@ void sort2(t_stack *a, t_stack *b)
                 count++;
             }
         }
+
     }
     //stack_print(a);
-    printf("finished count = %d\n", g_count);
 }
 

@@ -6,7 +6,7 @@
 /*   By: lcarmelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/26 16:01:58 by lcarmelo          #+#    #+#             */
-/*   Updated: 2020/02/29 19:54:54 by lcarmelo         ###   ########.fr       */
+/*   Updated: 2020/03/02 14:14:16 by lcarmelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PUSH_SWAP_H
 # include "stack.h"
 
+int                 get_median(t_vector *vector, size_t med);
 void                stack_print(t_stack *stack);
 int                 stack_is_sorted(t_stack *stack);
 void                sort2(t_stack *a, t_stack *b);
