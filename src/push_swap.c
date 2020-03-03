@@ -12,9 +12,9 @@ int main(void)
     stack_init(&a, 1, sizeof(int));
     stack_init(&b, 1, sizeof(int));
 
-    for (int i = 0; i < 500; i++)
+    for (int i = 0; i < 100; i++)
     {
-        ran = (int)ft_random(100);
+        ran = (int)ft_random(20);
         stack_push(&a, &ran);
     }
     
@@ -28,7 +28,7 @@ int main(void)
     //printf("%d\n", get_median(&tmp, tmp.size >> 1));
 
     sort2(&a, &b);
-    //stack_print(&a);
+    stack_print(&a);
     printf("2 part: count = %d\n", g_count);
     //while (!stack_is_empty(&a))
     //{

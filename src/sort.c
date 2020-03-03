@@ -1,18 +1,45 @@
 #include "push_swap.h"
 #include <stdio.h>
+#include <limits.h>
 
-int         stack_is_sorted(t_stack *stack)
+
+size_t 		get_min_index(t_vector *vector)
+{
+	size_t i;
+	size_t min_i;
+	int min;
+	int tmp;
+
+	i = 0;
+	min = INT_MAX;
+	while (i < vector->size)
+	{	
+		tmp = *(int *)vector_get_element(vector, i);
+		if (min >= tmp)
+		{
+			min  = tmp;
+			min_i = i;	
+		}
+		i++;
+	}
+	return (min_i);
+}
+
+int         vector_is_sorted(t_vector *vector)
 {
     size_t i;
+	size_t min_i;
 
     i = 0;
-    while (i < stack->size - 1)
+	min_i = get_min_index(vector);
+    while (i < vector->size - 1)
     {
-        if (*(int *)stack_get_element(stack, i) < *(int *)stack_get_element(stack, i + 1))
-            return (FALSE);
+        if (*(int *)stack_get_element(vector, (min_i + i) % vector->size) < 
+				*(int *)stack_get_element(vector, (min_i + i + 1) % vector->size))
+            return (-1);
         i++;
     }
-    return (TRUE);
+    return (min_i);
 }
 
 void stack_print(t_stack *stack)
@@ -244,27 +271,20 @@ int get_median(t_vector *vector, size_t med)
 void sort2(t_stack *a, t_stack *b)
 {
     int median;
-	int median_b;
     int max;
     int i;
     size_t j;
+	size_t l;
     size_t count;
-    t_stack tmp;
-	t_stack tmp2;
-	int data;
 
     i = 0;
-    stack_init(&tmp, 1, sizeof(size_t));
-    stack_init(&tmp2, 1, sizeof(int));
     if (!stack_is_empty(a))
     {
-        while (a->size > 2)
+        while (a->size > 2 && ((l = vector_is_sorted(a)) == -1))
         {
             i = 0;
             count = 0;
-			median = get_median(a, a->size / 4);
-			if (stack_is_empty(b))
-				median = get_median(a, a->size / 8);
+            median = get_median(a, a->size / 10); 
             while (i < a->size + count)
             {
                 if (median < *(int *)stack_top(a))
@@ -280,60 +300,30 @@ void sort2(t_stack *a, t_stack *b)
                     //{
                     //    sort_insert(a, b, median);
                     //}
-                    //else if (*(int *)stack_top(b) > *(int *)stack_top(a))
-                    //{
-                    //    ph(b, a);
-                    //    //if (a->size > 2 && *(int *)stack_get_element(a, a->size - 2) > *(int *)stack_top(a))
-                    //    //    ss(a, b);
-                    //    //else
-                    //    //    ss(b, NULL);
-                    //    ss(b, NULL);
-                    //}
+                    else if (*(int *)stack_top(b) > *(int *)stack_top(a))
+                    {
+                        ph(b, a);
+                        ss(b, NULL);
+                    }
                     else
                         ph(b, a);
-					data = *(int *)stack_top(b);
-					stack_push(&tmp2, &data);
                     count++;
                 }
                 i++;
             }
-			stack_print(b);
-			//stack_print(&tmp2);
-			printf("size = %d\n", b->size);
-			int k;
-			k = 0;
-			if (count > 2)
-			{
-				while (k < 2)
-				{
-					median_b = get_median(&tmp2, 3 * tmp2.size / 4);
-					while (tmp2.size > 2)
-					{
-						if (median_b > *(int *)stack_top(b))
-						{
-							if (median < *(int *)stack_top(a))
-								rr(a, b);
-							else
-								rr(b, NULL);
-							stack_pop(&tmp2);
-							count--;
-						}
-						else
-							break;
-					}
-					k++;
-					printf("median = %d\n", median_b);
-					stack_print(b);
-				}
-			}
-			vector_clear(&tmp2);
-			stack_push(&tmp, &count);
-			return ;
         }
-        //stack_print(&tmp);
-        printf("1 part: count = %d\n", g_count);
-        if (!stack_is_empty(a) && !stack_is_sorted(a))
-            ss(a, NULL); 
+        //stack_print(b);
+		//stack_print(a);
+        printf("l = %d\n\n", l);
+        printf("count = %d\n\n", g_count);
+        //printf("1 part: count = %d\n", g_count);
+
+		stack_print(a);
+		while (l-- >= 0)
+			rr(a, NULL);	
+		//stack_print(a);
+        //if (!stack_is_empty(a) && !vector_is_sorted(a))
+        //    ss(a, NULL); 
         count = 0;
         while (!stack_is_empty(b))
         {
