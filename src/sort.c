@@ -126,11 +126,11 @@ static int get_max(t_stack *stack, size_t size)
    int max; 
    size_t i;
 
-   max = INT_MIN;
    i = 0;
+   max = INT_MIN;
    while (i < size)
    {
-        max = ft_max(max, *(int *)stack_get_element(stack, stack->size - i - 1));
+        max = ft_max_l(max, *(int *)stack_get_element(stack, stack->size - i - 1));
         i++;
    }
    return (max);
@@ -285,132 +285,6 @@ int get_median(t_vector *vector, size_t med)
     return (tmp);
 }
 
-void sort(t_stack *a, t_stack *b)
-{ 
-    int median;
-    int max;
-    int i;
-    size_t j;
-	int l;
-    size_t count;
-    int k;
-    int med;
-
-    i = 0;
-    if (!stack_is_empty(a))
-    {
-        while (((l = vector_is_sorted(a)) == -1) && a->size > 2)
-        {
-            i = 0;
-            count = 0; 
-            median = get_median(a, a->size / 10); 
-            //printf("size a = %zu\n", a->size);
-            //stack_print(a);
-            while (i < a->size + count)
-            {
-                if (median < *(int *)stack_top(a))
-                {
-                    rr(a, NULL);
-                    i++;
-                }
-                else
-                {
-                    if (stack_is_empty(b))
-                        ph(b, a);
-                    //else if (flag)
-                    //{
-                    //    sort_insert(a, b, median);
-                    //}
-                    else if (*(int *)stack_top(b) > *(int *)stack_top(a))
-                    {
-                        ph(b, a);
-                        if (a->size > 2 && *(int *)stack_get_element(a, a->size - 2) > *(int *)stack_top(a))
-                            ss(a, b);
-                        else
-                            ss(b, NULL);
-                    }
-                    else
-                        ph(b, a);
-                    count++;
-                }
-                i++;
-            }
-            k++;
-        }
-        //stack_print(b);
-		//stack_print(a);
-        ///printf("l = %d\n\n", l);
-        printf("l = %d\n", l);
-        printf("1 part: count = %d\n", g_count);
-		while (l-- > 0)
-			rr(a, NULL);	
-		//stack_print(a);
-        //if (!stack_is_empty(a) && !vector_is_sorted(a))
-        //    ss(a, NULL); 
-        count = 0;
-        while (!stack_is_empty(b))
-        {
-            max = get_max(b, b->size); 
-            if (*(int *)stack_top(b) == max)
-            {
-                ph(a, b);
-                max = get_max(b, b->size); 
-                if (get_max_i(b, max) > b->size >> 1)
-                    continue ;
-                j = 0;
-                while (count > 0 && count--)
-                {
-                    rrr(b, NULL);
-                    if (b->size >= 2 && *(int *)stack_get_element(b, b->size - 2) == max)
-                    {
-                        ss(b, NULL);
-                        ph(a, b);
-                        max = get_max(b, b->size); 
-                    }
-                    while (*(int *)stack_top(b) == max)
-                    {
-                        ph(a, b);
-                        if (stack_is_empty(b))
-                           return ;
-                    }
-                    if (get_max_i(b, max) > b->size >> 1)
-                        break ;
-                }
-            }
-            else
-            {
-                rr(b, NULL);
-                count++;
-            }
-        }
-
-    }
-    //stack_print(a);
-}
-
-int get_elem_min_cost(t_vector *a, t_vector *b)
-{
-    size_t i;
-    size_t j;
-    int max; 
-    int min;
-    int cost;
-    int tmp;
-    
-    i = 0;
-    cost = INT_MAX;
-    max = get_max(max, b->size);
-    while (i < b->size)
-    {
-        tmp = *(int *)vector_get_element(b, b->size - i - 1);
-        while (j < b->size - 1)
-        {
-            
-        }
-        i++;
-    }
-}
-
 void sort2(t_stack *a, t_stack *b)
 { 
     int median;
@@ -418,18 +292,18 @@ void sort2(t_stack *a, t_stack *b)
     int i;
 	int l;
     size_t count;
-    int k;
+	int *s;
+	t_stack cout_element;
 
     i = 0;
+	stack_init(&cout_element, 1, sizeof(int));
     if (!stack_is_empty(a))
     {
         while (((l = vector_is_sorted(a)) == -1) && a->size > 2)
         {
             i = 0;
             count = 0; 
-            median = get_median(a, a->size); 
-            //printf("size a = %zu\n", a->size);
-            //stack_print(a);
+            median = get_median(a, a->size >> 1); 
             while (i < a->size + count)
             {
                 if (median < *(int *)stack_top(a))
@@ -444,7 +318,8 @@ void sort2(t_stack *a, t_stack *b)
                     else if (*(int *)stack_top(b) > *(int *)stack_top(a))
                     {
                         ph(b, a);
-                        if (a->size > 2 && *(int *)stack_get_element(a, a->size - 2) > *(int *)stack_top(a))
+                        if (a->size > 2 && 
+							*(int *)stack_get_element(a, a->size - 2) > *(int *)stack_top(a))
                             ss(a, b);
                         else
                             ss(b, NULL);
@@ -454,52 +329,59 @@ void sort2(t_stack *a, t_stack *b)
                     count++;
                 }
                 i++;
+				stack_push(&cout_element, &count);
             }
-            k++;
         }
     }
-    //stack_print(b);
-    //stack_print(a);
-    ///printf("l = %d\n\n", l);
-    printf("l = %d\n", l);
-    printf("1 part: count = %d\n", g_count);
     while (l-- > 0)
         rr(a, NULL);	
-
+	stack_print(b);
     while (!stack_is_empty(b))
     {
-        max = get_max(b, b->size); 
-        if (*(int *)stack_top(b) == max)
-        {
-            ph(a, b);
-            max = get_max(b, b->size); 
-            if (get_max_i(b, max) > b->size >> 1)
-                continue ;
-            j = 0;
-            while (count > 0 && count--)
-            {
-                rrr(b, NULL);
-                if (b->size >= 2 && *(int *)stack_get_element(b, b->size - 2) == max)
-                {
-                    ss(b, NULL);
-                    ph(a, b);
-                    max = get_max(b, b->size); 
-                }
-                while (*(int *)stack_top(b) == max)
-                {
-                    ph(a, b);
-                    if (stack_is_empty(b))
-                       return ;
-                }
-                if (get_max_i(b, max) > b->size >> 1)
-                    break ;
-            }
-        }
-        else
-        {
-            rr(b, NULL);
-            count++;
-        }
-    }
-
+		i = 0;
+		s = (int *)stack_pop(&cout_element);
+		while (*s > 0)
+		{
+			max = get_max(b, b->size); 
+			median = get_median(b, b->size - (*s >> 1));
+			printf("s = %d\n", *s);
+			printf("max = %d\n", max);
+			printf("median = %d\n", median);
+			while (median > *(int *)stack_top(b))
+			{
+				rr(b, NULL);
+				count++;
+			}
+			stack_print(b);
+			while (*(int *)stack_top(b) == max)
+			{
+				ph(a, b);
+				*s--;
+			}
+			max = get_max(b, b->size); 
+			if (*(int *)stack_get_element(b, b->size - 2) == max)
+			{
+				ss(b, NULL);
+				ph(a, b);
+				*s--;
+			}
+			else
+			{
+				rr(b, NULL);
+				count++;
+			}
+			*s -= count;
+		}
+		while (count-- >= 0)
+		{
+			rrr(b, NULL);
+			if (*(int *)stack_top(b) == max)
+			{
+				ph(a, b);
+				max = get_max(b, b->size); 
+			}
+			else
+				*s++;
+		}
+	}
 }
