@@ -20,9 +20,10 @@ int main(void)
             ran = (int)ft_random(j*10);
             stack_push(&a, &ran);
         }
-        sort2(&a, &b);
+        sort(&a, &b);
         vector_clear(&a);
         printf("2 part: count = %d\n", g_count);
+        return ;
         g_count = 0;
     }
     
