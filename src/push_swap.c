@@ -11,19 +11,17 @@ int main(void)
 
     stack_init(&a, 1, sizeof(int));
     stack_init(&b, 1, sizeof(int));
-
     for (int j = 1; j < 100; j++)
     {
-        printf("max = %d\n", j * 10);
-        for (int i = 0; i < 500; i++)
+        for (int i = 0; i < 10; i++)
         {
-            ran = (int)ft_random(j*10);
+            ran = (int)ft_random(50);
             stack_push(&a, &ran);
         }
         sort(&a, &b);
         vector_clear(&a);
         printf("2 part: count = %d\n", g_count);
-        return ;
+        return (0);
         g_count = 0;
     }
     

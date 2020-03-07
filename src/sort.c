@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <limits.h>
 
-
 size_t 		get_max_index(t_vector *vector)
 {
 	size_t i;
@@ -23,6 +22,28 @@ size_t 		get_max_index(t_vector *vector)
 		i++;
 	}
 	return (max_i);
+}
+
+size_t 		get_min_index(t_vector *vector)
+{
+	size_t i;
+	size_t min_i;
+	int min;
+	int tmp;
+
+	i = 0;
+	min = INT_MAX;
+	while (i < vector->size)
+	{	
+		tmp = *(int *)vector_get_element(vector, i);
+		if (min >= tmp)
+		{
+			min = tmp;
+			min_i = i;	
+		}
+		i++;
+	}
+	return (min_i);
 }
 
 int         vector_is_sorted(t_vector *vector)
@@ -285,36 +306,57 @@ int get_median(t_vector *vector, size_t med)
     return (tmp);
 }
 
-int get_cost_b(t_stack *b, int elem)
+int get_opt_elem(t_stack *b)
 {
     size_t i;
+    size_t j;
+    int tmp_elem;
+    int elem;
+    int opt_elem;
     int cost;
+    int opt_cost;
 
     i = 0;
-    cost = 0;
+    opt_cost = INT_MAX;
     while (i < b->size)
     {
-        if (*(int *)stack_get_element(b, i) == elem)
-            cost++;
+        j = 0;
+        cost = 0;
+        elem = *(int *)stack_get_element(b, i);
+        while (j < b->size)
+        {
+            tmp_elem = *(int *)stack_get_element(b, j); 
+            if (tmp_elem > elem)
+                cost++;
+            else if (tmp_elem == elem)
+                break ;
+            j++;
+        }
+        if (opt_cost > cost)
+        {
+            opt_cost = cost;
+            opt_elem = elem;
+        }
         i++;
     }
-    return (((b->size >> 1) > cost ? cost : b->size - cost));
+    return (opt_elem);
 }
 
-int get_cost_a(t_stack *a, int elem)
+int get_position(t_stack *a, int elem) 
 {
     size_t i;
-    int cost;
-
+    size_t max_index;
+    
     i = 0;
-    cost = 0;
+    max_index = get_min_index(a);
+    printf("max_index = %zu\n", max_index);
     while (i < a->size)
     {
-        if (*(int *)stack_get_element(a, i) < elem)
-            cost++;
+        if (*(int *)stack_get_element(a, (i + max_index) % a->size) < elem)
+            break ;
         i++;
     }
-    return ((b->size >> 1) > cost ? 1 : -1);
+    return ((i + max_index) % a->size);
 }
 
 void sort(t_stack *a, t_stack *b)
@@ -324,12 +366,10 @@ void sort(t_stack *a, t_stack *b)
     int opt_elem;
     int i;
 	int l;
+    int tmp;
     size_t count;
-	int *s;
-	t_stack count_element;
 
     i = 0 ;
-	stack_init(&count_element, 1, sizeof(int));
     if (!stack_is_empty(a))
     {
         while (((l = vector_is_sorted(a)) == -1) && a->size > 2)
@@ -351,8 +391,7 @@ void sort(t_stack *a, t_stack *b)
                     else if (*(int *)stack_top(b) > *(int *)stack_top(a))
                     {
                         ph(b, a);
-                        if (a->size > 2 && 
-							*(int *)stack_get_element(a, a->size - 2) > *(int *)stack_top(a))
+                        if (a->size > 2 && *(int *)stack_get_element(a, a->size - 2) > *(int *)stack_top(a))
                             ss(a, b);
                         else
                             ss(b, NULL);
@@ -362,46 +401,33 @@ void sort(t_stack *a, t_stack *b)
                     count++;
                 }
                 i++;
-                stack_push(&count_element, &count);
             }
         }
     }
-    while (l-- > 0)
-        rr(a, NULL);	
+    if (l == -1)
+        ss(a, NULL);
     while (!stack_is_empty(b))
     {
-        s = (int *)stack_pop(&count_element);
-        opt_elem = get_elem_min_cost(b, b->size, *s); 
-        if (*(int *)stack_top(b) == opt_elem)
+        printf("STACK B\n");
+        stack_print(b);
+        printf("STACK A\n");
+        stack_print(a);
+        opt_elem = get_opt_elem(b);
+        l = get_position(a, opt_elem);
+        printf("opt_elem = %d\n", opt_elem);
+        printf("pos in a = %d\n", l);
+        while (*(int *)stack_get_element(b, i) == opt_elem)
+            rr(b, NULL);
+        if ((b->size >> 1) > l)
         {
-            ph(a, b);
-            opt_elem = get_elem_min_cost(b, b->size, *s); 
-            if (get_max_i(b, opt_elem) > b->size >> 1)
-                continue ;
-            while (count > 0 && count--)
-            {
-                rrr(b, NULL);
-                if (b->size >= 2 && *(int *)stack_get_element(b, b->size - 2) == opt_elem)
-                {
-                    ss(b, NULL);
-                    ph(a, b);
-                    opt_elem = get_elem_min_cost(b, b->size, *s); 
-                }
-                while (*(int *)stack_top(b) == opt_elem)
-                {
-                    ph(a, b);
-                    if (stack_is_empty(b))
-                       return ;
-                }
-                if (get_max_i(b, opt_elem) > b->size >> 1)
-                    break ;
-            }
+            while (l-- > 0)
+                rr(a, NULL);
         }
         else
         {
-            rr(b, NULL);
-            count++;
+            while (l-- > 0)
+                rrr(a, NULL);
         }
+        ph(a, b);
     }
-
 }
