@@ -17,8 +17,7 @@
 int                 get_median(t_vector *vector, size_t med);
 void                stack_print(t_stack *stack);
 int                 stack_is_sorted(t_stack *stack);
-void                sort2(t_stack *a, t_stack *b);
-void                sort(t_stack *a, t_stack *b);
+void                stack_sort(t_stack *a, t_stack *b);
 
 void                ph(t_stack *a, t_stack *b);
 void                ss(t_stack *a, t_stack *b);

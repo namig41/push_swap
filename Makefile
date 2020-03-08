@@ -1,7 +1,5 @@
 # **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
+#                                                                              # #                                                         :::      ::::::::    # #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: lcarmelo <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
@@ -49,4 +47,8 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+compile: re
+	@clear
+	./$(NAME)
+
+.PHONY: all clean fclean re compile
