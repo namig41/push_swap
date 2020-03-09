@@ -13,14 +13,14 @@ int main(void)
     stack_init(&b, 1, sizeof(int));
     for (int j = 1; j < 100; j++)
     {
-		printf("max element = %d\n", j*10);
-        for (int i = 0; i < 100; i++)
+		printf("max = %d\n", j*10);
+        for (int i = 0; i < 500; i++)
         {
             ran = (int)ft_random(j*10);
             stack_push(&a, &ran);
         }
         stack_sort(&a, &b);
-		stack_print(&a);
+		//stack_print(&a);
         vector_clear(&a);
         printf("count = %d\n", g_count);
         g_count = 0;

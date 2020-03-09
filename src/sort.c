@@ -112,6 +112,7 @@ static int get_min(t_stack *stack, size_t size)
    return (min);
 }
 
+
 int get_median(t_vector *vector, size_t med)
 {
     size_t i;
@@ -154,7 +155,7 @@ int get_median(t_vector *vector, size_t med)
     return (tmp);
 }
 
-int get_position(t_stack *a, int elem) 
+int get_index(t_stack *a, int elem) 
 {
     size_t i;
     size_t j;
@@ -163,14 +164,49 @@ int get_position(t_stack *a, int elem)
     j = get_max_index(a);
     while (i < a->size)
     {
-        if (*(int *)stack_get_element(a, (i + j) % a->size) <= elem)
+        if (*(int *)stack_get_element(a, (i + j) % a->size) < elem)
             break ;
         i++;
     }
     return (a->size - i);
 }
 
-int get_opt_elem(t_stack *a, t_stack *b)
+static int get_opt_index(t_stack *stack, int elem)
+{
+	size_t i;
+
+	i = 0;
+	while (i <= stack->size >> 1)
+	{
+		if (*(int *)stack_get_element(stack, stack->size - i - 1) == elem)
+			return (i);
+		i++;
+	}
+	i = 0;
+	while (i < stack->size >> 1)
+	{
+		if (*(int *)stack_get_element(stack, i) == elem)
+			return (-i - 1);
+		i++;
+	}
+	return ((stack->size >> 1) + 1);
+}
+
+int get_true_position(t_vector *vector, int elem)
+{
+	size_t i;
+
+	i = 0;
+	while (i < vector->size)
+	{
+		if (*(int *)vector_get_element(vector, i) == elem)
+			break ;
+		i++;
+	}
+	return (i);
+}
+
+int get_opt_elem(t_stack *a, t_stack *b, t_vector *vector)
 {
     size_t i;
     size_t j;
@@ -186,9 +222,8 @@ int get_opt_elem(t_stack *a, t_stack *b)
     {
         j = 0;
         elem = *(int *)stack_get_element(b, b->size - i - 1);
-		//cost = (i > (b->size >> 1)) ? b->size - i - 1 : i;
-		cost = i;
-		cost += get_position(a, elem);
+		cost = (i > (b->size >> 1)) ? b->size - i - 1 : i;
+		cost += (a->size - get_true_position(vector, elem));
         if (opt_cost > cost)
         {
             opt_cost = cost;
@@ -198,6 +233,7 @@ int get_opt_elem(t_stack *a, t_stack *b)
     }
     return (opt_elem);
 }
+
 
 void 	stack_sort_part_1(t_stack *a, t_stack *b)
 {
@@ -229,82 +265,126 @@ void 	stack_sort_part_1(t_stack *a, t_stack *b)
 		}
 	}
 	if (l == -1)
-	{
 		ss(a, NULL);
-		return ;
-	}
 }
 
-void stack_sort_part_2(t_stack *a, t_stack *b)
+void stack_sort_part_2(t_stack *a, t_stack *b, t_vector *vector)
 { 
-	int l;
+	int a_i;
+	int b_i;
 	int count;
 	int opt_elem;
 	
 	count = vector_is_sorted(a);
     while (!stack_is_empty(b))
     {
-        opt_elem = get_opt_elem(a, b);
-        l = get_position(a, opt_elem);
-		l -= count;
+        opt_elem = get_opt_elem(a, b, vector);
+        a_i = get_index(a, opt_elem);
+		b_i = get_opt_index(b, opt_elem);
+		a_i -= count;
+		//printf("opt_elem = %d\na_i = %d\nb_i = %d\n", opt_elem, a_i, b_i);
 
         //while (*(int *)stack_top(b) != opt_elem)
 		//{
 		//	rr(b, NULL);
 		//}
-		if (l > 0)
+		if (a_i >= 0 && b_i >= 0)
 		{
-			while (*(int *)stack_top(b) != opt_elem && l-- > 0)
+			while (a_i > 0 && b_i > 0)
 			{
 				rr(a, b);
 				count++;
+				a_i--;
+				b_i--;
 			}
-			while (*(int *)stack_top(b) != opt_elem)
+			while (b_i-- > 0)
 				rr(b, NULL);
-            while (l-- > 0)
+            while (a_i-- > 0)
 			{
 				rr(a, NULL);
 				count++;
 			}
 		}
-        else
+        else if (a_i <= 0 && b_i <= 0)
         {
-			l = -l;
-			while (*(int *)stack_top(b) != opt_elem)
+			a_i = -a_i;
+			b_i = -b_i;
+			while (b_i > 0 && a_i > 0)
 			{
-				rr(b, NULL);
+				rrr(a, b);
+				count--;
+				a_i--;
+				b_i--;
 			}
-            while (l-- > 0)
+			while (b_i-- > 0)
+				rrr(b, NULL);
+            while (a_i-- > 0)
 			{
 				rrr(a, NULL);
 				count--;
 			}
         }
+		else
+		{
+			if (a_i >= 0 && b_i <= 0)
+			{
+				b_i = -b_i;
+				while (b_i-- > 0)
+					rrr(b, NULL);
+				while (a_i-- > 0)
+				{
+					rr(a, NULL);
+					count++;
+				}
+			}
+			if (a_i <= 0 && b_i >= 0)
+			{
+				a_i = -a_i;
+				while (b_i-- > 0)
+					rr(b, NULL);
+				while (a_i-- > 0)
+				{
+					rrr(a, NULL);
+					count--;
+				}
+			}
+		}
         ph(a, b);
+		//printf("STACK A\n");
+		//stack_print(a);
+		//printf("STACK B\n");
+		//stack_print(b);
     }
-	l = vector_is_sorted(a);
-	if (a->size >> 1)
+	a_i = vector_is_sorted(a);
+	if ((a->size >> 1) > a_i)
 	{
-		l = a->size - l;
-		while (l-- > 0)
+		a_i = a->size - a_i;
+		while (a_i-- > 0)
 		{
 			rr(a, NULL);
 		}
 	}
 	else
 	{
-		while (l-- > 0)
+		while (a_i-- > 0)
 		{
 			rrr(a, NULL);
 		}
 	}
 }
 
+
 void stack_sort(t_stack *a, t_stack *b)
 {
+	t_vector vec;
+
 	if (stack_is_empty(a))
 		return ;
+	vector_init(&vec, a->capacity, a->element_size);
+	vector_copy(&vec, a);
+	vector_qsort(&vec);
 	stack_sort_part_1(a, b);
-	stack_sort_part_2(a, b);
+	stack_sort_part_2(a, b, &vec);
+	vector_destroy(&vec);
 }
 
