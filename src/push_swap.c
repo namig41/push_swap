@@ -1,28 +1,28 @@
 #include "push_swap.h"
 # include <stdio.h>
+# define MAX_RANGE 100
 
 int main(void)
 {
     t_stack a;
     t_stack b;
+    t_vector vector;
     int ran;
     //void *data;
     //t_vector tmp;
 
     stack_init(&a, 1, sizeof(int));
     stack_init(&b, 1, sizeof(int));
-    for (int j = 1; j < 100; j++)
+    vector_init(&vector, 1, sizeof(int));
+
+    for (int i=0; i < MAX_RANGE; i++)
+        vector_push_back_data(&a, &i);
+
+    for (int j=0; j < 500; j++)
     {
-		printf("max = %d\n", j*10);
-        for (int i = 0; i < 500; i++)
-        {
-            ran = (int)ft_random(j*10);
-            stack_push(&a, &ran);
-        }
+        for (int i=0; i < MAX_RANGE; i++)
+            ft_memswap(vector_get_element(&a, i), vector_get_element(&a, (int)ft_random(a.size - 1)), a.element_size);
         stack_sort(&a, &b);
-		//stack_print(&a);
-        vector_clear(&a);
-        printf("count = %d\n", g_count);
         g_count = 0;
     }
     return (0);
