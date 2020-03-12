@@ -6,9 +6,9 @@ size_t 		get_max_index(t_vector *vector)
 {
 	size_t i;
 	size_t max_i;
-	int max;
 	int tmp;
 
+    int max;
 	i = 0;
 	max = INT_MIN;
 	while (i < vector->size)
@@ -34,8 +34,8 @@ size_t 		get_min_index(t_vector *vector)
 	i = 0;
 	min = INT_MAX;
 	while (i < vector->size)
-	{	
 		tmp = *(int *)vector_get_element(vector, i);
+    {	
 		if (min >= tmp)
 		{
 			min = tmp;
@@ -240,15 +240,15 @@ int get_opt_elem(t_stack *a, t_stack *b, int count, t_vector *vector)
         cost_a = 0;
         elem = *(int *)stack_get_element(b, b->size - i - 1);
 		cost_b = get_opt_index(b, elem);
-		//cost_b = (i > (b->size >> 1)) ? b->size - i - 1 : -i;
         cost_a = get_index(a, elem) - count;
-        //printf("cost: a = %d b = %d\n", cost_a, cost_b);
         if (cost_a * cost_b > 0) 
             total_cost = ft_abs(ft_abs(cost_a) - ft_abs(cost_b));
         else
             total_cost = ft_abs(cost_a) + ft_abs(cost_b);
 		total_cost += get_true_position(vector, elem);
-        if (opt_cost >= total_cost)
+        //total_cost = ft_abs(cost_a) + ft_abs(cost_b);
+        //printf("total_cost = %d\n", total_cost);
+        if (opt_cost > total_cost)
         {
             opt_cost = total_cost;
             opt_elem = elem;
@@ -259,10 +259,11 @@ int get_opt_elem(t_stack *a, t_stack *b, int count, t_vector *vector)
 }
 
 
-void 	stack_sort_part_1(t_stack *a, t_stack *b)
+void 	stack_sort_part_1(t_stack *a, t_stack *b, t_vector *vector)
 {
 	int l;
     int median;
+    int median_b;
     size_t i;
     size_t count;
 
@@ -270,7 +271,7 @@ void 	stack_sort_part_1(t_stack *a, t_stack *b)
 	{
 		i = 0;
 		count = 0; 
-		median = get_median(a, a->size >> 1); 
+		median = get_median(a, a->size >> 2); 
 		while (a->size > 3 && i < a->size + count)
 		{
 			if (median < *(int *)stack_top(a))
@@ -280,8 +281,19 @@ void 	stack_sort_part_1(t_stack *a, t_stack *b)
 			}
 			else
 			{
-				ph(b, a); count++;
-                if (((l = vector_is_sorted(a)) != -1))
+                median_b = b->size ? get_median(b, b->size >> 1) : INT_MIN; 
+                if (median_b > *(int *)stack_top(a))
+                {
+                    ph(b, a);
+                    if (median < *(int *)stack_top(a))
+                        rr(a, b);
+                    else
+                        rr(b, NULL);
+                }
+                else
+                    ph(b, a);
+                count++;
+                if ((l = vector_is_sorted(a)) != -1)
                     return ;
 			}
 			i++;
@@ -319,7 +331,9 @@ void stack_sort_part_2(t_stack *a, t_stack *b, t_vector *vector)
 				b_i--;
 			}
 			while (b_i-- > 0)
-				rr(b, NULL);
+            {
+                rr(b, NULL);
+            }
             while (a_i-- > 0)
 			{
 				rr(a, NULL);
@@ -363,10 +377,10 @@ void stack_sort_part_2(t_stack *a, t_stack *b, t_vector *vector)
 				a_i = -a_i;
 				while (b_i-- > 0)
                 {
-                    if (*(int *)stack_get_element(b, b->size - 2) == opt_elem)
+                    if (*(int *)stack_second(b) == opt_elem)
                     {
-                        ss(b, NULL);
-                        break ;
+                       ss(b, NULL);
+                       break ;
                     }
                     rr(b, NULL);
                 }
@@ -382,23 +396,26 @@ void stack_sort_part_2(t_stack *a, t_stack *b, t_vector *vector)
         ph(a, b);
 		//printf("STACK A\n");
 		//stack_print(a);
+        //printf("g_count = %d\n", g_count);
     }
 	a_i = vector_is_sorted(a);
     if (a_i == -1)
         stack_print(a);
+    if (a_i == 0)
+        return ;
 	if ((a->size >> 1) > a_i)
+	{
+		while (a_i-- > 0)
+		{
+			rrr(a, NULL);
+		}
+	}
+	else
 	{
 		a_i = a->size - a_i;
 		while (a_i-- > 0)
 		{
 			rr(a, NULL);
-		}
-	}
-	else
-	{
-		while (a_i-- > 0)
-		{
-			rrr(a, NULL);
 		}
 	}
 }
@@ -415,7 +432,7 @@ void stack_sort(t_stack *a, t_stack *b)
     vector_qsort(&vec);
     if (vector_is_unique(&vec))
     {
-        stack_sort_part_1(a, b);
+        stack_sort_part_1(a, b, &vec);
         printf("part 1: g_count = %d\n", g_count);
         stack_sort_part_2(a, b, &vec);
         printf("part 2: g_count = %d\n\n", g_count);
