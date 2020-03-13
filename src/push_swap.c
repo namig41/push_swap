@@ -1,6 +1,6 @@
 #include "push_swap.h"
 # include <stdio.h>
-# define MAX_RANGE 500
+# define MAX_RANGE 100
 
 int main(void)
 {
@@ -18,12 +18,13 @@ int main(void)
     for (int i=0; i < MAX_RANGE; i++)
         vector_push_back_data(&a, &i);
 
-    for (int j=0; j < 500; j++)
+    for (int j=0; j < 5000; j++)
     {
         for (int i=0; i < MAX_RANGE; i++)
             ft_memswap(vector_get_element(&a, i), vector_get_element(&a, (int)ft_random(a.size - 1)), a.element_size);
-        stack_sort(&a, &b);
-        //return (0);
+    	stack_sort(&a, &b);
+		stack_print(&a);
+		return (0);
         g_count = 0;
     }
     return (0);

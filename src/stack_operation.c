@@ -1,6 +1,6 @@
 #include "push_swap.h"
 
-void        ss(t_stack *a, t_stack *b)
+void        ss(t_stack *a, t_stack *b, char *oper)
 {
     if (stack_is_initialized(a))
     {
@@ -14,10 +14,11 @@ void        ss(t_stack *a, t_stack *b)
                     stack_get_element(b, b->size - 2),
                     b->element_size);
     }
+	ft_putendl(oper);
     g_count++;
 }
 
-void        rr(t_stack *a, t_stack *b)
+void        rr(t_stack *a, t_stack *b, char *oper)
 {
     void    *tmp;
 
@@ -31,10 +32,11 @@ void        rr(t_stack *a, t_stack *b)
         tmp = stack_pop(b);
         vector_push_front_data(b, tmp);
     }
+	ft_putendl(oper);
     g_count++;
 }
 
-void        rrr(t_stack *a, t_stack *b)
+void        rrr(t_stack *a, t_stack *b, char *oper)
 {
     void    *tmp;
 
@@ -48,10 +50,11 @@ void        rrr(t_stack *a, t_stack *b)
         tmp = vector_pop_front(b);
         stack_push(b, tmp);
     }
+	ft_putendl(oper);
     g_count++;
 }
 
-void    ph(t_stack *a, t_stack *b)
+void    ph(t_stack *a, t_stack *b, char *oper)
 {
     void *data;
 
@@ -61,6 +64,7 @@ void    ph(t_stack *a, t_stack *b)
         stack_push(a, data);
         ft_memdel(&data);
     }
+	ft_putendl(oper);
     g_count++;
 }
 
