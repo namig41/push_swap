@@ -1,6 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sort.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lcarmelo <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/03/14 20:08:34 by lcarmelo          #+#    #+#             */
+/*   Updated: 2020/03/14 20:13:15 by lcarmelo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
-#include <stdio.h>
-#include <limits.h>
 
 size_t 		get_max_index(t_vector *vector)
 {
@@ -246,8 +256,6 @@ int get_opt_elem(t_stack *a, t_stack *b, int count, t_vector *vector)
         else
             total_cost = ft_abs(cost_a) + ft_abs(cost_b);
 		total_cost += get_true_position(vector, elem);
-        //total_cost = ft_abs(cost_a) + ft_abs(cost_b);
-        //printf("total_cost = %d\n", total_cost);
         if (opt_cost > total_cost)
         {
             opt_cost = total_cost;
@@ -258,7 +266,6 @@ int get_opt_elem(t_stack *a, t_stack *b, int count, t_vector *vector)
     return (opt_elem);
 }
 
-
 void 	stack_sort_part_1(t_stack *a, t_stack *b, t_vector *vector)
 {
 	int l;
@@ -266,12 +273,14 @@ void 	stack_sort_part_1(t_stack *a, t_stack *b, t_vector *vector)
     int median_b;
     size_t i;
     size_t count;
+	size_t size;
 
-	while (a->size > 3)
+	size = a->size;
+	while ((l = vector_is_sorted(a)) == -1 && a->size > 3)
 	{
 		i = 0;
 		count = 0; 
-		median = get_median(a, a->size >> 1); 
+		median = get_median(a, (size >= 250) ? a->size >> 2 : a->size >> 1); 
 		while (a->size > 3 && i < a->size + count)
 		{
 			if (median < *(int *)stack_top(a))
@@ -311,16 +320,12 @@ void stack_sort_part_2(t_stack *a, t_stack *b, t_vector *vector)
 	int opt_elem;
 	
 	count = vector_is_sorted(a);
-    if (count == -1)
-        stack_print(a);
     while (!stack_is_empty(b))
     {
         opt_elem = get_opt_elem(a, b, count, vector);
         a_i = get_index(a, opt_elem);
 		b_i = get_opt_index(b, opt_elem);
 		a_i -= count;
-		//printf("opt_elem = %d\na_i = %d\nb_i = %d\n", opt_elem, a_i, b_i);
-
 		if (a_i >= 0 && b_i >= 0)
 		{
 			while (a_i > 0 && b_i > 0)
@@ -391,12 +396,7 @@ void stack_sort_part_2(t_stack *a, t_stack *b, t_vector *vector)
 				}
 			}
 		}
-		//printf("STACK B\n");
-		//stack_print(b);
         ph(a, b, PA);
-		//printf("STACK A\n");
-		//stack_print(a);
-        //printf("g_count = %d\n", g_count);
     }
 	a_i = vector_is_sorted(a);
     if (a_i == -1)
@@ -433,9 +433,7 @@ void stack_sort(t_stack *a, t_stack *b)
     if (vector_is_unique(&vec))
     {
         stack_sort_part_1(a, b, &vec);
-        //printf("part 1: g_count = %d\n", g_count);
         stack_sort_part_2(a, b, &vec);
-        //printf("part 2: g_count = %d\n\n", g_count);
     }
 	vector_destroy(&vec);
 }

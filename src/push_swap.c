@@ -1,30 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push_swap.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lcarmelo <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/03/14 17:19:14 by lcarmelo          #+#    #+#             */
+/*   Updated: 2020/03/14 18:19:14 by lcarmelo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
-# include <stdio.h>
-# define MAX_RANGE 100
 
 int main(int argc, char *argv[])
 {
     t_stack a;
     t_stack b;
-    t_vector vector;
-    int ran;
-   	void *data;
 
-    stack_init(&a, 1, sizeof(int));
-    stack_init(&b, 1, sizeof(int));
-
-    vector_init(&vector, 1, sizeof(int));
-
-    for (int i=0; i < MAX_RANGE; i++)
-        vector_push_back_data(&a, &i);
-
-    for (int j=0; j < 5000; j++)
-    {
-        for (int i=0; i < MAX_RANGE; i++)
-            ft_memswap(vector_get_element(&a, i), vector_get_element(&a, (int)ft_random(a.size - 1)), a.element_size);
-    	stack_sort(&a, &b);
-		return (0);
-        g_count = 0;
-    }
+	parse_arg(&a, &b, argc, argv);
+	stack_sort(&a, &b);
     return (0);
 }

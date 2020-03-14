@@ -1,12 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   checker.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lcarmelo <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/03/14 17:19:20 by lcarmelo          #+#    #+#             */
+/*   Updated: 2020/03/14 18:11:32 by lcarmelo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
-static void print_error(void)
-{
-	write(2, ERR, sizeof(ERR));
-	exit(1);
-}
-
-void    valid_line(char *line, t_stack *a, t_stack *b)
+int    valid_line(char *line, t_stack *a, t_stack *b)
 {
     if (ft_strequ(line, PA))
 		ph(a, b, NO_PR);
@@ -31,50 +37,39 @@ void    valid_line(char *line, t_stack *a, t_stack *b)
     else if (ft_strequ(line, RRB))
 		rrr(b, NULL, NO_PR);
 	else
-		print_error();
+		return (0);
+	return (1);
 }
 
 void 	read_oper(t_stack *a, t_stack *b)
 {
 	char *line;
+	t_vector vector;
 
-	while (get_next_line(0, &line) > 0)
+    vector_init(&vector, a->capacity, a->element_size);
+	vector_copy(&vector, a);
+	vector_qsort(&vector);
+	if (!vector_is_unique((&vector)))
+		print_error();
+	while (get_next_line(0, &line))
 	{
-		valid_line(line, a, b);
+		if (!valid_line(line, a, b))
+			break ;
 		ft_memdel((void **)&line);
 	}
 	if (vector_is_sorted(a) == 0)
-		ft_putendl("OK");
+		ft_putendl(OK);
 	else
-		ft_putendl("KO");
+		ft_putendl(KO);
+	vector_destroy(&vector);
 }
 
 int     main(int argc, char *argv[])
 {
-	int num;
-    size_t i;
-	size_t j;
-	size_t len;
     t_stack a;
     t_stack b;
 
-	i = 1;
-    stack_init(&a, 1, sizeof(int));
-    stack_init(&b, 1, sizeof(int));
-    while (i < argc)
-    {
-		j = 0;
-		len = ft_strlen(argv[i]);
-		while (j < len)
-		{
-			if (!ft_isdigit(argv[i][j]) && argv[i][j] != '-')
-				print_error();
-			j++;
-		}
-		num = ft_atoi(argv[i]);
-        stack_push(&a, &num);
-        i++;
-    }
+	parse_arg(&a, &b, argc, argv);
 	if (!stack_is_empty(&a))
 		read_oper(&a, &b);
 	return (0);

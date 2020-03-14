@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   stack_operation.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lcarmelo <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/03/14 17:18:54 by lcarmelo          #+#    #+#             */
+/*   Updated: 2020/03/14 18:04:21 by lcarmelo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
 void        ss(t_stack *a, t_stack *b, char *oper)
@@ -6,7 +18,8 @@ void        ss(t_stack *a, t_stack *b, char *oper)
         ft_memswap(stack_top(a), stack_second(a), a->element_size);
     if (stack_is_initialized(b) && b->size > 2)
         ft_memswap(stack_top(b), stack_second(b), b->element_size);
-	ft_putendl(oper);
+	if (oper)
+		ft_putendl(oper);
     g_count++;
 }
 
@@ -24,7 +37,8 @@ void        rr(t_stack *a, t_stack *b, char *oper)
         tmp = stack_pop(b);
         vector_push_front_data(b, tmp);
     }
-	ft_putendl(oper);
+	if (oper)
+		ft_putendl(oper);
     g_count++;
 }
 
@@ -42,7 +56,8 @@ void        rrr(t_stack *a, t_stack *b, char *oper)
         tmp = vector_pop_front(b);
         stack_push(b, tmp);
     }
-	ft_putendl(oper);
+	if (oper)
+		ft_putendl(oper);
     g_count++;
 }
 
@@ -56,7 +71,8 @@ void    ph(t_stack *a, t_stack *b, char *oper)
         stack_push(a, data);
         ft_memdel(&data);
     }
-	ft_putendl(oper);
+	if (oper)
+		ft_putendl(oper);
     g_count++;
 }
 

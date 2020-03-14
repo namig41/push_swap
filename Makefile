@@ -6,12 +6,13 @@
 #    By: lcarmelo <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/03/13 19:35:02 by lcarmelo          #+#    #+#              #
-#    Updated: 2020/03/13 19:37:34 by lcarmelo         ###   ########.fr        #
+#    Updated: 2020/03/14 16:53:49 by lcarmelo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 FILE_GENERAL = \
 			sort \
+			parse_arg \
 			stack_operation
 
 FILE_PUSH_SWAP = \
