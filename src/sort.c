@@ -16,9 +16,9 @@ size_t 		get_max_index(t_vector *vector)
 {
 	size_t i;
 	size_t max_i;
+	int max;
 	int tmp;
 
-    int max;
 	i = 0;
 	max = INT_MIN;
 	while (i < vector->size)
@@ -32,28 +32,6 @@ size_t 		get_max_index(t_vector *vector)
         i++;
 	}
 	return (max_i);
-}
-
-size_t 		get_min_index(t_vector *vector)
-{
-	size_t i;
-	size_t min_i;
-	int min;
-	int tmp;
-
-	i = 0;
-	min = INT_MAX;
-	while (i < vector->size)
-		tmp = *(int *)vector_get_element(vector, i);
-    {	
-		if (min >= tmp)
-		{
-			min = tmp;
-			min_i = i;	
-		}
-		i++;
-	}
-	return (min_i);
 }
 
 int         vector_is_sorted(t_vector *vector)
@@ -88,54 +66,6 @@ int     vector_is_unique(t_vector *vector)
     }
     return (1);
 }
-
-void stack_print(t_stack *stack)
-{
-    int i;
-
-    if (!stack_is_empty(stack))
-    {
-        i = (int)stack->size - 1;
-        while (i >= 0)
-        {
-            printf("%d\n", *(int *)stack_get_element(stack, i));
-            i--;
-        }
-        printf("\n");
-    }
-}
-
-
-static int get_max(t_stack *stack, size_t size)
-{
-   int max; 
-   size_t i;
-
-   i = 0;
-   max = INT_MIN;
-   while (i < size)
-   {
-        max = ft_max_l(max, *(int *)stack_get_element(stack, stack->size - i - 1));
-        i++;
-   }
-   return (max);
-}
-
-static int get_min(t_stack *stack, size_t size)
-{
-   int min; 
-   size_t i;
-
-   i = 0;
-   min = INT_MAX;
-   while (i < size)
-   {
-        min = ft_min(min, *(int *)stack_get_element(stack, stack->size - i - 1));
-        i++;
-   }
-   return (min);
-}
-
 
 int get_median(t_vector *vector, size_t med)
 {
@@ -233,7 +163,6 @@ int get_true_position(t_vector *vector, int elem)
 int get_opt_elem(t_stack *a, t_stack *b, int count, t_vector *vector)
 {
     size_t i;
-    size_t j;
     int elem;
     int opt_elem;
     int tmp_elem;
@@ -246,8 +175,6 @@ int get_opt_elem(t_stack *a, t_stack *b, int count, t_vector *vector)
     opt_cost = INT_MAX;
     while (i < b->size)
     {
-        j = 0;
-        cost_a = 0;
         elem = *(int *)stack_get_element(b, b->size - i - 1);
 		cost_b = get_opt_index(b, elem);
         cost_a = get_index(a, elem) - count;
