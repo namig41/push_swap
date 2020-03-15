@@ -1,23 +1,28 @@
 import random
 from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5.QtWidgets import QMessageBox
+import ps_operation
 from ps_operation import PS_Operation
 import time
 
 class StackBoard(QtWidgets.QWidget):
     def __init__(self, parent):
         super(StackBoard, self).__init__(parent)
-        self.setGeometry(QtCore.QRect(30, 50, 600, 630))
+        self.setGeometry(QtCore.QRect(30, 30, 600, 630))
 
-        self.stack_a = list(range(1, 100))
-        random.shuffle(self.stack_a)
-        self.stack_size = len(self.stack_a)
+        self.setAutoFillBackground(True)
+        p = self.palette()
+        p.setColor(self.backgroundRole(), QtGui.QColor(43, 35, 35))
+        self.setPalette(p)
+
+        self.rgb = []
+        self.stack_a = []
         self.stack_b = []
         self.list_operations = []
-
-        self.timer = QtCore.QTimer(self)
-
         self.w = self.size().width()
         self.h = self.size().height()
+        self.stack_size = ps_operation.STACK_MIN_SIZE
+        self.timer = QtCore.QTimer(self)
 
     def paintEvent(self, e):
         paint = QtGui.QPainter()
@@ -29,8 +34,8 @@ class StackBoard(QtWidgets.QWidget):
     def draw_stack(self, paint):
         k = self.w // self.stack_size;
 
-        paint.setBrush(QtGui.QColor(255, 80, 0, 160))
-        for i in range(1, self.stack_size):
+        paint.setBrush(QtGui.QColor(*self.rgb, 160))
+        for i in range(self.stack_size):
             if i < len(self.stack_a):
                 paint.drawRect(0, i * k, 
                         self.stack_a[len(self.stack_a) - i - 1] / max(self.stack_a) * (self.w >> 1), k)
@@ -41,7 +46,9 @@ class StackBoard(QtWidgets.QWidget):
     def run(self):
         if len(self.list_operations) == 0:
             self.timer.stop()
+            QMessageBox.information(self, "Результат", "Количество операций: " + str(self.count_operations))
             return 
+
         i = self.list_operations.pop(0) 
         if i == b'pb':
             PS_Operation.ph(self.stack_b, self.stack_a)
@@ -66,3 +73,8 @@ class StackBoard(QtWidgets.QWidget):
         elif i == b'rrb':
             PS_Operation.rrx(self.stack_b)
         self.update()
+
+    def clear(self):
+        self.rgb = []
+        self.stack_a = []
+

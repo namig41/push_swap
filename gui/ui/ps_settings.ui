@@ -41,17 +41,17 @@
      <widget class="QComboBox" name="comboBox">
       <item>
        <property name="text">
-        <string>Задать рандомно</string>
+        <string>Rand</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Задать в ручную</string>
+        <string>Input</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Считать файл</string>
+        <string>File</string>
        </property>
       </item>
      </widget>
@@ -70,6 +70,9 @@
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QLineEdit" name="lineEdit">
+        <property name="text">
+         <string>255</string>
+        </property>
         <property name="placeholderText">
          <string>r</string>
         </property>
@@ -77,6 +80,9 @@
       </item>
       <item>
        <widget class="QLineEdit" name="lineEdit_2">
+        <property name="text">
+         <string>80</string>
+        </property>
         <property name="placeholderText">
          <string>g</string>
         </property>
@@ -84,6 +90,9 @@
       </item>
       <item>
        <widget class="QLineEdit" name="lineEdit_3">
+        <property name="text">
+         <string>160</string>
+        </property>
         <property name="placeholderText">
          <string>b</string>
         </property>

@@ -1,3 +1,6 @@
+STACK_MIN_SIZE  = 10
+DEF_SIZE        = 100
+
 class PS_Operation():
     @staticmethod
     def ph(a, b):
