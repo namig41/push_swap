@@ -326,8 +326,6 @@ void stack_sort_part_2(t_stack *a, t_stack *b, t_vector *vector)
         ph(a, b, PA);
     }
 	a_i = vector_is_sorted(a);
-    if (a_i == -1)
-        stack_print(a);
     if (a_i == 0)
         return ;
 	if ((a->size >> 1) > a_i)
