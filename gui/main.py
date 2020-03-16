@@ -1,4 +1,5 @@
-#! /usr/bin/python3
+#! usr/bin/python3
+# -*- coding: utf-8 -*-
 
 import sys
 import csv
@@ -52,7 +53,7 @@ class PUSH_SWAP_GUI(QtWidgets.QMainWindow):
         self.save_file()
 
     def start(self):
-        ps = subprocess.Popen(["/home/namig/Source/push_swap/push_swap", 
+        ps = subprocess.Popen(["../push_swap", 
             ' '.join(list(map(str, self.board.stack_a)))], stdout=subprocess.PIPE)
 
         for line in ps.stdout:  
@@ -75,8 +76,9 @@ class PUSH_SWAP_GUI(QtWidgets.QMainWindow):
     def combo_box_process(self):
         text = self.dlg_ui.comboBox.currentText().lower()
         if text == 'rand':
-            size = int(QInputDialog.getText(self, 'Range', 'Введите диапазон: ')[0])
-            if size is None:
+            try:
+                size = int(QInputDialog.getText(self, 'Range', 'Введите диапазон: ')[0])
+            except:
                 size = ps_operation.DEF_SIZE
             self.board.stack_a = list(range(1, size + 1))
             random.shuffle(self.board.stack_a)

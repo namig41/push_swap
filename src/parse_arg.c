@@ -6,57 +6,57 @@
 /*   By: lcarmelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/14 17:19:08 by lcarmelo          #+#    #+#             */
-/*   Updated: 2020/03/14 20:08:18 by lcarmelo         ###   ########.fr       */
+/*   Updated: 2020/03/16 12:13:09 by lcarmelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "push_swap.h"
+#include "push_swap.h"
 
-inline void print_error(void)
+inline void	print_error(void)
 {
 	write(2, ERR_PR, sizeof(ERR_PR));
 	exit(1);
 }
 
-void 	parse_arg(t_stack *a, t_stack *b, int argc, char *argv[])
+static void	parse_str(t_stack *a, char *str, size_t len)
 {
-	int num;
-    size_t i;
-	size_t j;
-	size_t k;
-	size_t len;
-	int flag;
+	size_t	k;
+	size_t	j;
+	int		tmp;
 
-	i = 1;
-    stack_init(a, 1, sizeof(int));
-    stack_init(b, 1, sizeof(int));
-    while (i < argc)
-    {
-		j = 0;
-		k = 0;
-		len = ft_strlen(argv[i]);
-		while (j < len)
-		{
-			flag = 0;
-			while (ft_isescape(argv[i][j]) && j < len)
-				j++;
-			while (!ft_isescape(argv[i][j]) && j < len)
-			{
-				if (ft_isdigit(argv[i][j + 1]) && argv[i][j] == '-')
-					;
-				else if (!ft_isdigit(argv[i][j]))
-					print_error();
-				flag = 1;
-				j++;
-			}
-			if (!flag)
-				break ;
-			num = ft_atoi(argv[i] + k);
-			stack_push(a, &num);
-			k = j;
+	j = 0;
+	k = 0;
+	while (!(tmp = !(j < len)))
+	{
+		while (ft_isescape(str[j]) && j < len)
 			j++;
+		while (!ft_isescape(str[j]) && j < len)
+		{
+			if (ft_isdigit(str[j + 1]) && str[j] == '-')
+				;
+			else if (!ft_isdigit(str[j]))
+				print_error();
+			tmp = ++j;
 		}
-        i++;
-    }
+		if (!tmp)
+			break ;
+		tmp = ft_atoi(str + k);
+		stack_push(a, &tmp);
+		k = j;
+		j++;
+	}
 }
 
+void		parse_arg(t_stack *a, t_stack *b, int argc, char *argv[])
+{
+	size_t	i;
+
+	i = 1;
+	stack_init(a, 1, sizeof(int));
+	stack_init(b, 1, sizeof(int));
+	while (i < argc)
+	{
+		parse_str(a, argv[i], ft_strlen(argv[i]));
+		i++;
+	}
+}

@@ -6,47 +6,47 @@
 /*   By: lcarmelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/14 17:19:20 by lcarmelo          #+#    #+#             */
-/*   Updated: 2020/03/14 18:11:32 by lcarmelo         ###   ########.fr       */
+/*   Updated: 2020/03/16 12:02:16 by lcarmelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int    valid_line(char *line, t_stack *a, t_stack *b)
+int					valid_line(char *line, t_stack *a, t_stack *b)
 {
-    if (ft_strequ(line, PA))
+	if (ft_strequ(line, PA))
 		ph(a, b, NO_PR);
-    else if (ft_strequ(line, PB)) 
+	else if (ft_strequ(line, PB))
 		ph(b, a, NO_PR);
-    else if (ft_strequ(line, SS))
+	else if (ft_strequ(line, SS))
 		ss(a, b, NO_PR);
-    else if (ft_strequ(line, SA))
+	else if (ft_strequ(line, SA))
 		ss(a, NULL, NO_PR);
-    else if (ft_strequ(line, SB))
+	else if (ft_strequ(line, SB))
 		ss(b, NULL, NO_PR);
-    else if (ft_strequ(line, RR))
+	else if (ft_strequ(line, RR))
 		rr(a, b, NO_PR);
-    else if (ft_strequ(line, RA))
+	else if (ft_strequ(line, RA))
 		rr(a, NULL, NO_PR);
-    else if (ft_strequ(line, RB))
+	else if (ft_strequ(line, RB))
 		rr(b, NULL, NO_PR);
-    else if (ft_strequ(line, RRR))
+	else if (ft_strequ(line, RRR))
 		rrr(a, b, NO_PR);
-    else if (ft_strequ(line, RRA))
+	else if (ft_strequ(line, RRA))
 		rrr(a, NULL, NO_PR);
-    else if (ft_strequ(line, RRB))
+	else if (ft_strequ(line, RRB))
 		rrr(b, NULL, NO_PR);
 	else
 		return (0);
 	return (1);
 }
 
-void 	read_oper(t_stack *a, t_stack *b)
+void				read_oper(t_stack *a, t_stack *b)
 {
-	char *line;
-	t_vector vector;
+	char			*line;
+	t_vector		vector;
 
-    vector_init(&vector, a->capacity, a->element_size);
+	vector_init(&vector, a->capacity, a->element_size);
 	vector_copy(&vector, a);
 	vector_qsort(&vector);
 	if (!vector_is_unique((&vector)))
@@ -64,14 +64,13 @@ void 	read_oper(t_stack *a, t_stack *b)
 	vector_destroy(&vector);
 }
 
-int     main(int argc, char *argv[])
+int					main(int argc, char *argv[])
 {
-    t_stack a;
-    t_stack b;
+	t_stack		a;
+	t_stack		b;
 
 	parse_arg(&a, &b, argc, argv);
 	if (!stack_is_empty(&a))
 		read_oper(&a, &b);
 	return (0);
 }
-

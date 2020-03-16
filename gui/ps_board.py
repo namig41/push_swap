@@ -32,8 +32,9 @@ class StackBoard(QtWidgets.QWidget):
         paint.end()
 
     def draw_stack(self, paint):
-        k = self.w // self.stack_size;
+        k = self.h // self.stack_size;
 
+        print(k)
         paint.setBrush(QtGui.QColor(*self.rgb, 160))
         for i in range(self.stack_size):
             if i < len(self.stack_a):

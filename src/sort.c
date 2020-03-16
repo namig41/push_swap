@@ -6,7 +6,7 @@
 /*   By: lcarmelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/14 20:08:34 by lcarmelo          #+#    #+#             */
-/*   Updated: 2020/03/14 20:13:15 by lcarmelo         ###   ########.fr       */
+/*   Updated: 2020/03/16 12:18:47 by lcarmelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,7 +207,7 @@ void 	stack_sort_part_1(t_stack *a, t_stack *b, t_vector *vector)
 	{
 		i = 0;
 		count = 0; 
-		median = get_median(a, (size >= 250) ? a->size >> 2 : a->size >> 1); 
+		median = get_median(a, a->size >> 1);
 		while (a->size > 3 && i < a->size + count)
 		{
 			if (median < *(int *)stack_top(a))

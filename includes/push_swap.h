@@ -6,7 +6,7 @@
 /*   By: lcarmelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/26 16:01:58 by lcarmelo          #+#    #+#             */
-/*   Updated: 2020/03/14 18:04:34 by lcarmelo         ###   ########.fr       */
+/*   Updated: 2020/03/16 10:36:41 by lcarmelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,23 +35,21 @@
 # define OK "OK"
 # define KO "KO"
 
-int                 get_median(t_vector *vector, size_t med);
-void                stack_print(t_stack *stack);
-int                 vector_is_sorted(t_stack *stack);
-int                 vector_is_unique(t_vector *vector);
-void                stack_sort(t_stack *a, t_stack *b);
+int					get_median(t_vector *vector, size_t med);
+void				stack_print(t_stack *stack);
+int					vector_is_sorted(t_stack *stack);
+int					vector_is_unique(t_vector *vector);
+void				stack_sort(t_stack *a, t_stack *b);
 
-void                ph(t_stack *a, t_stack *b, char *oper);
-void                ss(t_stack *a, t_stack *b, char *oper);
-void                rr(t_stack *a, t_stack *b, char *oper);
-void                rrr(t_stack *a, t_stack *b, char *oper);
+void				ph(t_stack *a, t_stack *b, char *oper);
+void				ss(t_stack *a, t_stack *b, char *oper);
+void				rr(t_stack *a, t_stack *b, char *oper);
+void				rrr(t_stack *a, t_stack *b, char *oper);
 
-int 				valid_line(char *line, t_stack *a, t_stack *b);
-void 				read_oper(t_stack *a, t_stack *b);
+int					valid_line(char *line, t_stack *a, t_stack *b);
+void				read_oper(t_stack *a, t_stack *b);
 
-void 				parse_arg(t_stack *a, t_stack *b, int argc, char *argv[]);
-void 				print_error(void);
+void				parse_arg(t_stack *a, t_stack *b, int argc, char *argv[]);
+void				print_error(void);
 
-int                 g_count;
-
-# endif
+#endif

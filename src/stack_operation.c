@@ -6,7 +6,7 @@
 /*   By: lcarmelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/14 17:18:54 by lcarmelo          #+#    #+#             */
-/*   Updated: 2020/03/14 18:04:21 by lcarmelo         ###   ########.fr       */
+/*   Updated: 2020/03/16 11:42:41 by lcarmelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,7 @@ void        ss(t_stack *a, t_stack *b, char *oper)
         ft_memswap(stack_top(a), stack_second(a), a->element_size);
     if (stack_is_initialized(b) && b->size > 2)
         ft_memswap(stack_top(b), stack_second(b), b->element_size);
-	if (oper)
-		ft_putendl(oper);
-    g_count++;
+	ft_putendl(oper);
 }
 
 void        rr(t_stack *a, t_stack *b, char *oper)
@@ -37,9 +35,7 @@ void        rr(t_stack *a, t_stack *b, char *oper)
         tmp = stack_pop(b);
         vector_push_front_data(b, tmp);
     }
-	if (oper)
-		ft_putendl(oper);
-    g_count++;
+	ft_putendl(oper);
 }
 
 void        rrr(t_stack *a, t_stack *b, char *oper)
@@ -56,9 +52,7 @@ void        rrr(t_stack *a, t_stack *b, char *oper)
         tmp = vector_pop_front(b);
         stack_push(b, tmp);
     }
-	if (oper)
-		ft_putendl(oper);
-    g_count++;
+	ft_putendl(oper);
 }
 
 void    ph(t_stack *a, t_stack *b, char *oper)
@@ -71,8 +65,6 @@ void    ph(t_stack *a, t_stack *b, char *oper)
         stack_push(a, data);
         ft_memdel(&data);
     }
-	if (oper)
-		ft_putendl(oper);
-    g_count++;
+	ft_putendl(oper);
 }
 
