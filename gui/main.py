@@ -1,4 +1,4 @@
-#! usr/bin/python3
+#! /usr/bin/python3
 # -*- coding: utf-8 -*-
 
 import sys
@@ -21,8 +21,8 @@ class PUSH_SWAP_GUI(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        self.file_path = ""
         self.dlg = None
+        self.file_path = ""
         self.board = ps_board.StackBoard(self)
 
         self.ui.action.triggered.connect(self.open_file)
@@ -73,7 +73,7 @@ class PUSH_SWAP_GUI(QtWidgets.QMainWindow):
         self.dlg_ui.pushButton.clicked.connect(self.get_settings)
         self.dlg_ui.pushButton_2.clicked.connect(self.dlg.close)
 
-    def combo_box_process(self):
+    def combobox_process(self):
         text = self.dlg_ui.comboBox.currentText().lower()
         if text == 'rand':
             try:
@@ -88,12 +88,14 @@ class PUSH_SWAP_GUI(QtWidgets.QMainWindow):
             nums, ok = QInputDialog.getText(self, 'Input', 'Введите числа: ') 
             if ok:
                 self.board.stack_a = list(map(int, nums.split(' ')))
+                
         if len(self.board.stack_a) > ps_operation.STACK_MIN_SIZE:
             self.board.stack_size = len(self.board.stack_a)
+        self.board.max = max(self.board.stack_a)
 
     def get_settings(self):
         self.board.clear()
-        self.combo_box_process()
+        self.combobox_process()
         self.board.rgb.append(int(self.dlg_ui.lineEdit.text()))
         self.board.rgb.append(int(self.dlg_ui.lineEdit_2.text()))
         self.board.rgb.append(int(self.dlg_ui.lineEdit_3.text()))

@@ -1,6 +1,3 @@
-STACK_MIN_SIZE  = 10
-DEF_SIZE        = 100
-
 class PS_Operation():
     @staticmethod
     def ph(a, b):
@@ -32,3 +29,7 @@ class PS_Operation():
     @staticmethod
     def rrx(x):
        x.append(x.pop(0))
+
+STACK_MIN_SIZE  = 10
+DEF_SIZE        = 100
+

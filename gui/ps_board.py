@@ -8,13 +8,14 @@ import time
 class StackBoard(QtWidgets.QWidget):
     def __init__(self, parent):
         super(StackBoard, self).__init__(parent)
-        self.setGeometry(QtCore.QRect(30, 30, 600, 630))
+        self.setGeometry(QtCore.QRect(30, 30, 850, 880))
 
         self.setAutoFillBackground(True)
         p = self.palette()
         p.setColor(self.backgroundRole(), QtGui.QColor(43, 35, 35))
         self.setPalette(p)
 
+        self.max = 0
         self.rgb = []
         self.stack_a = []
         self.stack_b = []
@@ -32,17 +33,16 @@ class StackBoard(QtWidgets.QWidget):
         paint.end()
 
     def draw_stack(self, paint):
-        k = self.h // self.stack_size;
+        k = self.h / self.stack_size;
 
-        print(k)
         paint.setBrush(QtGui.QColor(*self.rgb, 160))
         for i in range(self.stack_size):
             if i < len(self.stack_a):
                 paint.drawRect(0, i * k, 
-                        self.stack_a[len(self.stack_a) - i - 1] / max(self.stack_a) * (self.w >> 1), k)
+                        self.stack_a[len(self.stack_a) - i - 1] / self.max * (self.w >> 1), k)
             if i < len(self.stack_b):
                 paint.drawRect(self.w, i * k, 
-                        -self.stack_b[len(self.stack_b) - i - 1] / max(self.stack_b) * (self.w >> 1), k)
+                        -self.stack_b[len(self.stack_b) - i - 1] / self.max * (self.w >> 1), k)
 
     def run(self):
         if len(self.list_operations) == 0:
@@ -76,6 +76,7 @@ class StackBoard(QtWidgets.QWidget):
         self.update()
 
     def clear(self):
+        self.max = 0
         self.rgb = []
         self.stack_a = []
 
