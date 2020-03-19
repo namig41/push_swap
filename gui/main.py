@@ -1,10 +1,7 @@
 #! /usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import sys
-import csv
-import random
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog, QInputDialog, QMessageBox
 from PyQt5.QtGui import QPainter, QColor, QFont, QColor, QPalette
 from ps_window import Ui_MainWindow
@@ -13,7 +10,9 @@ import ps_board
 import ps_settings
 import ps_operation
 import subprocess
+import random
 import sys
+import csv
 
 
 class PUSH_SWAP_GUI(QtWidgets.QMainWindow):
@@ -57,6 +56,7 @@ class PUSH_SWAP_GUI(QtWidgets.QMainWindow):
             self.dlg_ui.lineEdit_3.setStyleSheet(self.CURRENT_THEME_LINE)
             self.dlg_ui.pushButton.setStyleSheet(self.CURRENT_THEME_BUTTON)
             self.dlg_ui.pushButton_2.setStyleSheet(self.CURRENT_THEME_BUTTON)
+            self.dlg_ui.pushButton_3.setStyleSheet(self.CURRENT_THEME_BUTTON)
 
     def open_file(self):
         self.file_path = QFileDialog.getOpenFileName(self, 'Открыть', '/home')[0]
@@ -96,8 +96,13 @@ class PUSH_SWAP_GUI(QtWidgets.QMainWindow):
         self.set_theme('QDialog')
         self.dlg.show()
 
+        self.dlg_ui.pushButton_3.clicked.connect(self.get_image)
         self.dlg_ui.pushButton.clicked.connect(self.get_settings)
         self.dlg_ui.pushButton_2.clicked.connect(self.dlg.close)
+
+    def get_image(self):
+        self.img_path = QFileDialog.getOpenFileName(self, 'Сохранить как...', '/home')[0]
+        self.board.image = QtGui.QImage(self.img_path)
 
     def get_fill_stack_mode(self):
         mode = self.dlg_ui.comboBox.currentText().lower()
