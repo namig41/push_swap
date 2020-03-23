@@ -24,12 +24,16 @@ class StackBoard(QtWidgets.QWidget):
 
         self.image_path = ""
         self.image = None
+        self.finish = False 
 
     def paintEvent(self, e):
         paint = QtGui.QPainter()
 
         paint.begin(self)
-        self.draw_stack(paint)
+        if not self.finish or not self.image:
+            self.draw_stack(paint)
+        else:
+            self.show_image(paint)
         paint.end()
 
     def draw_stack(self, paint):
@@ -64,39 +68,51 @@ class StackBoard(QtWidgets.QWidget):
                     paint.drawImage(rect_b, self.image.copy(img_rect_b))
 
 
+    def show_image(self, paint):
+        if self.image:
+            rect = QtCore.QRect(0, 0, self.w, self.h)
+            paint.drawImage(rect, self.image.copy(rect))
+
     def run(self):
         if len(self.list_operations) == 0:
             self.timer.stop()
             QMessageBox.information(self, "Результат", "Количество операций: " + str(self.count_operations))
-            return 
-
-        i = self.list_operations.pop(0) 
-        if i == b'pb':
-            PS_Operation.ph(self.stack_b, self.stack_a)
-        elif i == b'pa':
-            PS_Operation.ph(self.stack_a, self.stack_b)
-        elif i == b'ss':
-            PS_Operation.ss(self.stack_a, self.stack_b)
-        elif i == b'sa':
-            PS_Operation.sx(self.stack_a)
-        elif i == b'sb':
-            PS_Operation.sx(self.stack_b)
-        elif i == b'rr':
-            PS_Operation.rr(self.stack_a, self.stack_b)
-        elif i == b'ra':
-            PS_Operation.rx(self.stack_a)
-        elif i == b'rb':
-            PS_Operation.rx(self.stack_b)
-        elif i == b'rrr':
-            PS_Operation.rrr(self.stack_a, self.stack_b)
-        elif i == b'rra':
-            PS_Operation.rrx(self.stack_a)
-        elif i == b'rrb':
-            PS_Operation.rrx(self.stack_b)
+            self.finish = True
+        else:
+            i = self.list_operations.pop(0) 
+            if i == b'pb':
+                PS_Operation.ph(self.stack_b, self.stack_a)
+            elif i == b'pa':
+                PS_Operation.ph(self.stack_a, self.stack_b)
+            elif i == b'ss':
+                PS_Operation.ss(self.stack_a, self.stack_b)
+            elif i == b'sa':
+                PS_Operation.sx(self.stack_a)
+            elif i == b'sb':
+                PS_Operation.sx(self.stack_b)
+            elif i == b'rr':
+                PS_Operation.rr(self.stack_a, self.stack_b)
+            elif i == b'ra':
+                PS_Operation.rx(self.stack_a)
+            elif i == b'rb':
+                PS_Operation.rx(self.stack_b)
+            elif i == b'rrr':
+                PS_Operation.rrr(self.stack_a, self.stack_b)
+            elif i == b'rra':
+                PS_Operation.rrx(self.stack_a)
+            elif i == b'rrb':
+                PS_Operation.rrx(self.stack_b)
         self.update()
 
     def clear(self):
-        self.max = 0
+        self.max = float('-inf')
+        self.stack_size = ps_operation.STACK_MIN_SIZE
+
         self.rgb = []
         self.stack_a = []
+        self.sort_stack_a = []
+
+        self.image_path = ""
+        self.image = None
+        self.finish = False 
 
