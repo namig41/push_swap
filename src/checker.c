@@ -49,18 +49,22 @@ void				read_oper(t_stack *a, t_stack *b)
 	vector_init(&vector, a->capacity, a->element_size);
 	vector_copy(&vector, a);
 	vector_qsort(&vector);
-	if (!vector_is_unique((&vector)))
+	if (!vector_is_unique(&vector))
 		print_error();
 	while (get_next_line(0, &line))
 	{
 		if (!valid_line(line, a, b))
+		{
+			get_next_line(0, 0);
 			break ;
+		}
 		ft_memdel((void **)&line);
 	}
 	if (vector_is_sorted(a) == 0)
 		ft_putendl(OK);
 	else
 		ft_putendl(KO);
+	ft_memdel((void **)&line);
 	vector_destroy(&vector);
 }
 
@@ -72,5 +76,7 @@ int					main(int argc, char *argv[])
 	parse_arg(&a, &b, argc, argv);
 	if (!stack_is_empty(&a))
 		read_oper(&a, &b);
+	vector_destroy(&a);
+	vector_destroy(&b);
 	return (0);
 }

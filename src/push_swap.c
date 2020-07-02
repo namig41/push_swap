@@ -19,5 +19,7 @@ int main(int argc, char *argv[])
 
 	parse_arg(&a, &b, argc, argv);
 	stack_sort(&a, &b);
+	vector_destroy(&a);
+	vector_destroy(&b);
     return (0);
 }

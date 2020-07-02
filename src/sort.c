@@ -78,7 +78,9 @@ int get_median(t_vector *vector, size_t med)
 
     i = 0;
     if (vector->size == 1)
-        tmp = *(int *)vector_get_element(vector, 0);
+    {
+		tmp = *(int *)vector_get_element(vector, 0);
+	}
     else
     {
         vector_init(&lows, 1, sizeof(int));
@@ -93,18 +95,23 @@ int get_median(t_vector *vector, size_t med)
             else if (tmp == pivot)
                 vector_push_back_data(&pivots, &tmp);
             else
-                vector_push_back_data(&highs, &tmp);
+            	vector_push_back_data(&highs, &tmp);
             i++;
         }
         if (med < lows.size)
            tmp = get_median(&lows, med);
         else if (med < lows.size + pivots.size)
-            return (pivot);
+        {
+			vector_destroy(&lows);
+			vector_destroy(&highs);
+			vector_destroy(&pivots);
+			return (pivot);
+		}
         else
             tmp = get_median(&highs, med - lows.size - pivots.size);
-        vector_destroy(&lows);
-        vector_destroy(&highs);
-        vector_destroy(&pivots);
+		vector_destroy(&lows);
+		vector_destroy(&highs);
+		vector_destroy(&pivots);
     }
     return (tmp);
 }
@@ -345,7 +352,6 @@ void stack_sort_part_2(t_stack *a, t_stack *b, t_vector *vector)
 	}
 }
 
-
 void stack_sort(t_stack *a, t_stack *b)
 {
 	t_vector vec;
@@ -358,7 +364,7 @@ void stack_sort(t_stack *a, t_stack *b)
     if (vector_is_unique(&vec))
     {
         stack_sort_part_1(a, b, &vec);
-        stack_sort_part_2(a, b, &vec);
+       	stack_sort_part_2(a, b, &vec);
     }
 	vector_destroy(&vec);
 }
