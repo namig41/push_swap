@@ -20,9 +20,10 @@ inline void	print_error(void)
 
 static void	parse_str(t_stack *a, char *str, size_t len)
 {
+	int num;
 	size_t	k;
 	size_t	j;
-	int		tmp;
+	t_ll	tmp;
 
 	j = 0;
 	k = 0;
@@ -40,8 +41,11 @@ static void	parse_str(t_stack *a, char *str, size_t len)
 		}
 		if (!tmp)
 			break ;
-		tmp = ft_atoi(str + k);
-		stack_push(a, &tmp);
+		tmp = ft_atoll(str + k);
+		if (tmp <= INT_MIN || tmp >= INT_MAX)
+			print_error();
+		num = tmp;
+		stack_push(a, &num);
 		k = j;
 		j++;
 	}

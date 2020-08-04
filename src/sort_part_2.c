@@ -84,7 +84,7 @@ static void		stack_sort_part22(t_stack *a)
 	int			tmp;
 
 	tmp = vector_is_sorted(a);
-	if (!tmp)
+	if (tmp == 0)
 		return ;
 	if ((a->size >> 1) > tmp)
 		while (tmp-- > 0)

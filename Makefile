@@ -40,7 +40,7 @@ CC 	   			= gcc
 PUSH_SWAP 		= push_swap
 CHECKER 		= checker
 #CFLAGS 	   		= -Wall -Werror -Wextra -O2 -I$(DIR_INC) -I$(DIR_LIB)$(DIR_INC)
-CFLAGS 	   		=  -O2 -I$(DIR_INC) -I$(DIR_LIB)$(DIR_INC)
+CFLAGS 	   		=  -g -O2 -I$(DIR_INC) -I$(DIR_LIB)$(DIR_INC)
 
 all: push_swap checker
 
