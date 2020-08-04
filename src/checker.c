@@ -12,7 +12,7 @@
 
 #include "push_swap.h"
 
-int					valid_line(char *line, t_stack *a, t_stack *b)
+void			valid_line(t_stack *a, t_stack *b, char *line)
 {
 	if (ft_strequ(line, PA))
 		ph(a, b, NO_PR);
@@ -37,30 +37,27 @@ int					valid_line(char *line, t_stack *a, t_stack *b)
 	else if (ft_strequ(line, RRB))
 		rrr(b, NULL, NO_PR);
 	else
-		return (0);
-	return (1);
+		print_error();
 }
 
-void				read_oper(t_stack *a, t_stack *b)
+static void		read_oper(t_stack *a, t_stack *b)
 {
-	char			*line;
-	t_vector		vector;
+	char		*line;
+	t_vector	vector;
 
 	vector_init(&vector, a->capacity, a->element_size);
 	vector_copy(&vector, a);
 	vector_qsort(&vector);
 	if (!vector_is_unique(&vector))
 		print_error();
-	while (get_next_line(0, &line))
+	while (get_next_line(STDIN_FILENO, &line) > 0)
 	{
-		if (!valid_line(line, a, b))
-		{
-			get_next_line(0, 0);
+		if (!*line)
 			break ;
-		}
+		valid_line(a, b, line);
 		ft_memdel((void **)&line);
 	}
-	if (vector_is_sorted(a) == 0)
+	if (!vector_is_sorted(a))
 		ft_putendl(OK);
 	else
 		ft_putendl(KO);
@@ -68,7 +65,7 @@ void				read_oper(t_stack *a, t_stack *b)
 	vector_destroy(&vector);
 }
 
-int					main(int argc, char *argv[])
+int				main(int argc, char *argv[])
 {
 	t_stack		a;
 	t_stack		b;

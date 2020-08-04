@@ -11,12 +11,15 @@
 # **************************************************************************** #
 
 FILE_GENERAL = \
-			sort \
 			parse_arg \
 			stack_operation
 
 FILE_PUSH_SWAP = \
 			push_swap \
+			sort \
+			sort_part_1 \
+			sort_part_2 \
+			information \
 			$(FILE_GENERAL)
 
 FILE_CHECKER = \

@@ -12,14 +12,14 @@
 
 #include "push_swap.h"
 
-int main(int argc, char *argv[])
+int			main(int argc, char *argv[])
 {
-    t_stack a;
-    t_stack b;
+	t_stack	a;
+	t_stack	b;
 
 	parse_arg(&a, &b, argc, argv);
 	stack_sort(&a, &b);
 	vector_destroy(&a);
 	vector_destroy(&b);
-    return (0);
+	return (0);
 }

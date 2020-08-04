@@ -14,7 +14,7 @@
 
 inline void	print_error(void)
 {
-	write(2, ERR_PR, sizeof(ERR_PR));
+	write(STDERR_FILENO, ERR_PR, sizeof(ERR_PR));
 	exit(1);
 }
 

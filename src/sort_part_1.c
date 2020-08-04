@@ -12,19 +12,49 @@
 
 #include "push_swap.h"
 
-void			stack_sort(t_stack *a, t_stack *b)
+static int		stack_sort_part_1a(t_stack *a, t_stack *b, int med, size_t *c)
 {
-	t_vector	vec;
+	int			median_b;
 
-	if (stack_is_empty(a))
-		return ;
-	vector_init(&vec, a->capacity, a->element_size);
-	vector_copy(&vec, a);
-	vector_qsort(&vec);
-	if (vector_is_unique(&vec))
+	median_b = b->size ? vector_get_median(b, b->size >> 1) : INT_MIN;
+	if (median_b > *(int *)stack_top(a))
 	{
-		stack_sort_part_1(a, b, &vec);
-		stack_sort_part_2(a, b, &vec);
+		ph(b, a, PB);
+		if (med < *(int *)stack_top(a))
+			rr(a, b, RR);
+		else
+			rr(b, NULL, RB);
 	}
-	vector_destroy(&vec);
+	else
+		ph(b, a, PB);
+	(*c)++;
+	return (vector_is_sorted(a));
+}
+
+void			stack_sort_part_1(t_stack *a, t_stack *b, t_vector *vector)
+{
+	int			l;
+	int			median;
+	size_t		i;
+	size_t		count;
+
+	while ((l = vector_is_sorted(a)) == -1 && a->size > 3)
+	{
+		i = 0;
+		count = 0;
+		median = vector_get_median(a, a->size >> 1);
+		while (a->size > 3 && i < a->size + count)
+		{
+			if (median < *(int *)stack_top(a))
+			{
+				rr(a, NULL, RA);
+				i++;
+			}
+			else if (stack_sort_part_1a(a, b, median, &count) != -1)
+				return ;
+			i++;
+		}
+	}
+	if (l == -1)
+		ss(a, NULL, SA);
 }

@@ -35,21 +35,44 @@
 # define OK "OK"
 # define KO "KO"
 
-int					get_median(t_vector *vector, size_t med);
-void				stack_print(t_stack *stack);
-int					vector_is_sorted(t_stack *stack);
-int					vector_is_unique(t_vector *vector);
+# define A		0
+# define B		1
+# define OPT	2
+# define TOTAL	3
+
+/*
+** --------------------------- FUNCTIONS --------------------------------
+** --------------------------- PUSH SWAP --------------------------------
+*/
+
 void				stack_sort(t_stack *a, t_stack *b);
+void				stack_sort_part_1(t_stack *a, t_stack *b, t_vector *vector);
+void				stack_sort_part_2(t_stack *a, t_stack *b, t_vector *vector);
+
+/*
+** --------------------------- OPERATIONS -----------------------------
+*/
 
 void				ph(t_stack *a, t_stack *b, char *oper);
 void				ss(t_stack *a, t_stack *b, char *oper);
 void				rr(t_stack *a, t_stack *b, char *oper);
 void				rrr(t_stack *a, t_stack *b, char *oper);
 
-int					valid_line(char *line, t_stack *a, t_stack *b);
-void				read_oper(t_stack *a, t_stack *b);
+/*
+** --------------------------- VALIDATION -----------------------------
+*/
 
+void				valid_line(t_stack *a, t_stack *b, char *line);
 void				parse_arg(t_stack *a, t_stack *b, int argc, char *argv[]);
 void				print_error(void);
+
+/*
+** --------------------------- INFORMATION -----------------------------
+*/
+
+int					get_opt_elem(t_stack *a, t_stack *b, int c, t_vector *v);
+int					get_true_position(t_vector *vector, int elem);
+int					get_opt_index(t_stack *stack, int elem);
+int					get_index(t_stack *a, int elem);
 
 #endif
