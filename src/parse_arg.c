@@ -20,15 +20,14 @@ inline void	print_error(void)
 
 static void	parse_str(t_stack *a, char *str, size_t len)
 {
-	int num;
-	size_t	k;
+	int		num;
 	size_t	j;
 	t_ll	tmp;
 
 	j = 0;
-	k = 0;
 	while (!(tmp = !(j < len)))
 	{
+		num = j;
 		while (ft_isescape(str[j]) && j < len)
 			j++;
 		while (!ft_isescape(str[j]) && j < len)
@@ -41,13 +40,10 @@ static void	parse_str(t_stack *a, char *str, size_t len)
 		}
 		if (!tmp)
 			break ;
-		tmp = ft_atoll(str + k);
-		if (tmp <= INT_MIN || tmp >= INT_MAX)
+		if ((tmp = ft_atoll(str + num)) <= INT_MIN || tmp >= INT_MAX)
 			print_error();
 		num = tmp;
-		stack_push(a, &num);
-		k = j;
-		j++;
+		j += vector_push_front_data(a, &num);
 	}
 }
 
