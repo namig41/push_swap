@@ -29,6 +29,7 @@ FILE_CHECKER = \
 DIR_SRC			= ./src/
 DIR_INC			= ./includes/
 DIR_LIB			= ./libft/
+DIR_OBJ			= ./obj/
 
 SRC_PUSH_SWAP 	= $(addprefix $(DIR_SRC), $(addsuffix .c, $(FILE_PUSH_SWAP)))
 OBJ_PUSH_SWAP 	= $(addsuffix .o, $(FILE_PUSH_SWAP))
@@ -46,7 +47,6 @@ all: push_swap checker
 
 lib:
 	@make -C $(DIR_LIB)
-	@cp libft/libft.a ./
 
 obj_checker:
 	@$(CC) $(CFLAGS) -c $(SRC_CHECKER)
@@ -55,15 +55,18 @@ obj_push_swap:
 	@$(CC) $(CFLAGS) -c $(SRC_PUSH_SWAP)
 
 checker: lib obj_checker
-	@$(CC) $(CFLAGS) -o $(CHECKER) $(OBJ_CHECKER) libft/libft.a
+	@$(CC) $(CFLAGS) -o $(CHECKER) $(OBJ_CHECKER) $(DIR_LIB)libft.a
+	@mkdir -p $(DIR_OBJ)
+	@mv $(OBJ_CHECKER) $(DIR_OBJ)
 
 push_swap: lib obj_push_swap
-	@$(CC) $(CFLAGS) -o $(PUSH_SWAP) $(OBJ_PUSH_SWAP) libft/libft.a
+	@$(CC) $(CFLAGS) -o $(PUSH_SWAP) $(OBJ_PUSH_SWAP) $(DIR_LIB)libft.a
+	@mkdir -p $(DIR_OBJ)
+	@mv $(OBJ_PUSH_SWAP) $(DIR_OBJ)
  
 clean:
 	@make clean -C $(DIR_LIB)
-	@rm -f $(OBJ_PUSH_SWAP)
-	@rm -f $(OBJ_CHECKER)
+	@rm -rf $(DIR_OBJ)
 	@rm -f libft.a
 
 fclean: clean

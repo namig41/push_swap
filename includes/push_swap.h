@@ -64,7 +64,12 @@ void				rrr(t_stack *a, t_stack *b, char *oper);
 
 void				valid_line(t_stack *a, t_stack *b, char *line);
 void				parse_arg(t_stack *a, t_stack *b, int argc, char *argv[]);
-void				print_error(void);
+
+/*
+** --------------------------- ERROR ------------------------------------
+*/
+
+void				print_error(t_stack *a, t_stack *b);
 
 /*
 ** --------------------------- INFORMATION -----------------------------

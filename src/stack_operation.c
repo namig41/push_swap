@@ -21,6 +21,7 @@ void		ss(t_stack *a, t_stack *b, char *oper)
 	ft_putendl(oper);
 }
 
+
 void		rr(t_stack *a, t_stack *b, char *oper)
 {
 	void	*tmp;
@@ -29,11 +30,13 @@ void		rr(t_stack *a, t_stack *b, char *oper)
 	{
 		tmp = stack_pop(a);
 		vector_push_front_data(a, tmp);
+		ft_memdel(&tmp);
 	}
 	if (!stack_is_empty(b))
 	{
 		tmp = stack_pop(b);
 		vector_push_front_data(b, tmp);
+		ft_memdel(&tmp);
 	}
 	ft_putendl(oper);
 }
@@ -46,11 +49,13 @@ void		rrr(t_stack *a, t_stack *b, char *oper)
 	{
 		tmp = vector_pop_front(a);
 		stack_push(a, tmp);
+		ft_memdel(&tmp);
 	}
 	if (!stack_is_empty(b))
 	{
 		tmp = vector_pop_front(b);
 		stack_push(b, tmp);
+		ft_memdel(&tmp);
 	}
 	ft_putendl(oper);
 }

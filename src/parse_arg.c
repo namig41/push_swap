@@ -12,8 +12,10 @@
 
 #include "push_swap.h"
 
-inline void	print_error(void)
+inline void	print_error(t_stack *a, t_stack *b)
 {
+	vector_destroy(a);
+	vector_destroy(b);
 	write(STDERR_FILENO, ERR_PR, sizeof(ERR_PR));
 	exit(1);
 }
@@ -35,13 +37,13 @@ static void	parse_str(t_stack *a, char *str, size_t len)
 			if (ft_isdigit(str[j + 1]) && str[j] == '-')
 				;
 			else if (!ft_isdigit(str[j]))
-				print_error();
+				print_error(a, NULL);
 			tmp = ++j;
 		}
 		if (!tmp)
 			break ;
 		if ((tmp = ft_atoll(str + num)) <= INT_MIN || tmp >= INT_MAX)
-			print_error();
+			print_error(a, NULL);
 		num = tmp;
 		j += vector_push_front_data(a, &num);
 	}

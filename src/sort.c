@@ -16,7 +16,8 @@ void			stack_sort(t_stack *a, t_stack *b)
 {
 	t_vector	vec;
 
-	if (stack_is_empty(a))
+	vec.data = NULL;
+	if (stack_is_empty(a) || a->size == 1)
 		return ;
 	vector_init(&vec, a->capacity, a->element_size);
 	vector_copy(&vec, a);

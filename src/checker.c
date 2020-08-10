@@ -37,7 +37,7 @@ void			valid_line(t_stack *a, t_stack *b, char *line)
 	else if (ft_strequ(line, RRB))
 		rrr(b, NULL, NO_PR);
 	else
-		print_error();
+		print_error(a, b);
 }
 
 static void		read_oper(t_stack *a, t_stack *b)
@@ -45,11 +45,12 @@ static void		read_oper(t_stack *a, t_stack *b)
 	char		*line;
 	t_vector	vector;
 
+	vector.data = NULL;
 	vector_init(&vector, a->capacity, a->element_size);
 	vector_copy(&vector, a);
 	vector_qsort(&vector);
 	if (!vector_is_unique(&vector))
-		print_error();
+		print_error(a, b);
 	while (get_next_line(STDIN_FILENO, &line) > 0)
 	{
 		if (!*line)
@@ -57,7 +58,7 @@ static void		read_oper(t_stack *a, t_stack *b)
 		valid_line(a, b, line);
 		ft_memdel((void **)&line);
 	}
-	if (!vector_is_sorted(a))
+	if (!vector_is_sorted(a) && vector_is_empty(b))
 		ft_putendl(OK);
 	else
 		ft_putendl(KO);
@@ -70,6 +71,8 @@ int				main(int argc, char *argv[])
 	t_stack		a;
 	t_stack		b;
 
+	a.data = NULL;
+	b.data = NULL;
 	parse_arg(&a, &b, argc, argv);
 	if (!stack_is_empty(&a))
 		read_oper(&a, &b);

@@ -17,6 +17,8 @@ int			main(int argc, char *argv[])
 	t_stack	a;
 	t_stack	b;
 
+	a.data = NULL;
+	b.data = NULL;
 	parse_arg(&a, &b, argc, argv);
 	stack_sort(&a, &b);
 	vector_destroy(&a);
