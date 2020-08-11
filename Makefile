@@ -32,10 +32,10 @@ DIR_LIB			= ./libft/
 DIR_OBJ			= ./obj/
 
 SRC_PUSH_SWAP 	= $(addprefix $(DIR_SRC), $(addsuffix .c, $(FILE_PUSH_SWAP)))
-OBJ_PUSH_SWAP 	= $(addsuffix .o, $(FILE_PUSH_SWAP))
+OBJ_PUSH_SWAP 	= $(addprefix $(DIR_OBJ), $(addsuffix .o, $(FILE_PUSH_SWAP)))
 
 SRC_CHECKER 	= $(addprefix $(DIR_SRC), $(addsuffix .c, $(FILE_CHECKER)))
-OBJ_CHECKER 	= $(addsuffix .o, $(FILE_CHECKER))
+OBJ_CHECKER 	= $(addprefix $(DIR_OBJ), $(addsuffix .o, $(FILE_CHECKER)))
 
 CC 	   			= gcc
 PUSH_SWAP 		= push_swap
@@ -46,28 +46,23 @@ CFLAGS 	   		=  -g -O2 -I$(DIR_INC) -I$(DIR_LIB)$(DIR_INC)
 all: push_swap checker
 
 lib:
-	@make -C $(DIR_LIB)
+	@make -C $(DIR_LIB) > /dev/null
 
-obj_checker:
-	@$(CC) $(CFLAGS) -c $(SRC_CHECKER)
+$(DIR_OBJ):
+	@mkdir -p $(DIR_OBJ)
 
-obj_push_swap:
-	@$(CC) $(CFLAGS) -c $(SRC_PUSH_SWAP)
-
-checker: lib obj_checker
+checker: $(OBJ_CHECKER) lib 
 	@$(CC) $(CFLAGS) -o $(CHECKER) $(OBJ_CHECKER) $(DIR_LIB)libft.a
-	@mkdir -p $(DIR_OBJ)
-	@mv $(OBJ_CHECKER) $(DIR_OBJ)
 
-push_swap: lib obj_push_swap
+push_swap: $(OBJ_PUSH_SWAP) lib 
 	@$(CC) $(CFLAGS) -o $(PUSH_SWAP) $(OBJ_PUSH_SWAP) $(DIR_LIB)libft.a
-	@mkdir -p $(DIR_OBJ)
-	@mv $(OBJ_PUSH_SWAP) $(DIR_OBJ)
+
+$(DIR_OBJ)%.o: $(DIR_SRC)%.c
+	@$(CC) $(CFLAGS) -c $< -o $@
  
 clean:
 	@make clean -C $(DIR_LIB)
 	@rm -rf $(DIR_OBJ)
-	@rm -f libft.a
 
 fclean: clean
 	@make fclean -C $(DIR_LIB)
@@ -80,4 +75,4 @@ compile: re
 	@clear
 	./$(PUSH_SWAP)
 
-.PHONY: all clean fclean re compile
+.PHONY: all clean fclean re compile checker push_swap
