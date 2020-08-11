@@ -46,15 +46,15 @@ CFLAGS 	   		=  -g -O2 -I$(DIR_INC) -I$(DIR_LIB)$(DIR_INC)
 all: push_swap checker
 
 lib:
-	@make -C $(DIR_LIB) > /dev/null
+	@make -C $(DIR_LIB)
 
 $(DIR_OBJ):
 	@mkdir -p $(DIR_OBJ)
 
-checker: $(OBJ_CHECKER) lib 
+checker: $(DIR_OBJ) $(OBJ_CHECKER) lib 
 	@$(CC) $(CFLAGS) -o $(CHECKER) $(OBJ_CHECKER) $(DIR_LIB)libft.a
 
-push_swap: $(OBJ_PUSH_SWAP) lib 
+push_swap: $(DIR_OBJ) $(OBJ_PUSH_SWAP) lib 
 	@$(CC) $(CFLAGS) -o $(PUSH_SWAP) $(OBJ_PUSH_SWAP) $(DIR_LIB)libft.a
 
 $(DIR_OBJ)%.o: $(DIR_SRC)%.c

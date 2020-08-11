@@ -20,7 +20,7 @@ inline void	print_error(t_stack *a, t_stack *b)
 	exit(1);
 }
 
-static void	parse_str(t_stack *a, char *str, size_t len)
+static void	parse_str(t_stack *a, t_stack *b, char *str, size_t len)
 {
 	int		num;
 	size_t	j;
@@ -43,7 +43,7 @@ static void	parse_str(t_stack *a, char *str, size_t len)
 		if (!tmp)
 			break ;
 		if ((tmp = ft_atoll(str + num)) <= INT_MIN || tmp >= INT_MAX)
-			print_error(a, NULL);
+			print_error(a, b);
 		num = tmp;
 		j += vector_push_front_data(a, &num);
 	}
@@ -58,7 +58,7 @@ void		parse_arg(t_stack *a, t_stack *b, int argc, char *argv[])
 	stack_init(b, 1, sizeof(int));
 	while (i < argc)
 	{
-		parse_str(a, argv[i], ft_strlen(argv[i]));
+		parse_str(a, b, argv[i], ft_strlen(argv[i]));
 		i++;
 	}
 }
