@@ -1,10 +1,4 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'ui/ps_window.ui'
-#
-# Created by: PyQt5 UI code generator 5.13.1
-#
-# WARNING! All changes made in this file will be lost!
+# -*- coding: utf-8 -*- # Form implementation generated from reading ui file 'ui/ps_window.ui' # # Created by: PyQt5 UI code generator 5.13.1 # # WARNING! All changes made in this file will be lost!
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -46,10 +40,16 @@ class Ui_MainWindow(object):
         self.action_3.setObjectName("action_3")
         self.action_4 = QtWidgets.QAction(MainWindow)
         self.action_4.setObjectName("action_4")
+        self.action_5 = QtWidgets.QAction(MainWindow)
+        self.action_4.setObjectName("action_4")
+        self.action_6 = QtWidgets.QAction(MainWindow)
+        self.action_4.setObjectName("action_4")
         self.menu.addAction(self.action)
         self.menu.addAction(self.action_2)
         self.menu.addAction(self.action_3)
         self.menu_2.addAction(self.action_4)
+        self.menu_2.addAction(self.action_5)
+        self.menu_2.addAction(self.action_6)
         self.menubar.addAction(self.menu.menuAction())
         self.menubar.addAction(self.menu_2.menuAction())
 
@@ -67,3 +67,5 @@ class Ui_MainWindow(object):
         self.action_2.setText(_translate("MainWindow", "Сохранить"))
         self.action_3.setText(_translate("MainWindow", "Сохранить как..."))
         self.action_4.setText(_translate("MainWindow", "Параметры"))
+        self.action_5.setText(_translate("MainWindow", "Start"))
+        self.action_6.setText(_translate("MainWindow", "Cancel"))

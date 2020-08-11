@@ -20,9 +20,19 @@ class PUSH_SWAP_GUI(QtWidgets.QMainWindow):
         super(PUSH_SWAP_GUI, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+
+        self.ui.action.triggered.connect(self.open_file)
+        self.ui.action_2.triggered.connect(self.save_file)
+        self.ui.action_3.triggered.connect(self.save_as_file)
+        self.ui.action_4.triggered.connect(self.settings)
+        self.ui.action_5.triggered.connect(self.start)
+        self.ui.action_6.triggered.connect(self.close_ps)
+
+        self.ui.pushButton.clicked.connect(self.start)
+        self.ui.pushButton_2.clicked.connect(self.close)
+
         self.board = ps_board.StackBoard(self)
 
-        # def theme
         self.CURRENT_THEME_WINDOW = ps_themes.DARK_WINDOW 
         self.CURRENT_THEME_FRAME  = ps_themes.DARK_FRAME
         self.CURRENT_THEME_BUTTON = ps_themes.DARK_BUTTON
@@ -32,12 +42,6 @@ class PUSH_SWAP_GUI(QtWidgets.QMainWindow):
         self.dlg = None
         self.file_path = ""
 
-        self.ui.action.triggered.connect(self.open_file)
-        self.ui.action_2.triggered.connect(self.save_file)
-        self.ui.action_3.triggered.connect(self.save_as_file)
-        self.ui.action_4.triggered.connect(self.settings)
-        self.ui.pushButton.clicked.connect(self.start)
-        self.ui.pushButton_2.clicked.connect(self.close_ps)
 
     def set_theme(self, name_window):
         if name_window == 'QMainWindow':
@@ -79,7 +83,7 @@ class PUSH_SWAP_GUI(QtWidgets.QMainWindow):
 
     def start(self):
         ps = subprocess.Popen(["../push_swap", 
-            ' '.join(list(map(str, self.board.stack_a)))], stdout=subprocess.PIPE)
+            ' '.join(list(map(str, self.board.stack_a[::-1])))], stdout=subprocess.PIPE)
 
         for line in ps.stdout:  
             self.board.list_operations.append(line.rstrip())
@@ -96,9 +100,9 @@ class PUSH_SWAP_GUI(QtWidgets.QMainWindow):
         self.set_theme('QDialog')
         self.dlg.show()
 
-        self.dlg_ui.pushButton_3.clicked.connect(self.get_image)
         self.dlg_ui.pushButton.clicked.connect(self.get_settings)
         self.dlg_ui.pushButton_2.clicked.connect(self.dlg.close)
+        self.dlg_ui.pushButton_3.clicked.connect(self.get_image)
 
     def get_image(self):
         self.img_path = QFileDialog.getOpenFileName(self, 'Сохранить как...', '/home')[0]
@@ -146,6 +150,13 @@ class PUSH_SWAP_GUI(QtWidgets.QMainWindow):
             self.CURRENT_THEME_LINE   = ps_themes.GREEN_LINE
         self.set_theme('QMainWindow')
 
+
+    def keyPressEvent(self, e):
+        key = e.key()
+        if key == QtCore.Qt.Key_A:
+            self.get_settings()
+        elif key == QtCore.Qt.Key_S:
+            self.start()
 
     def get_settings(self):
         self.board.clear()
