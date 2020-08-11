@@ -16,28 +16,15 @@ import csv
 
 
 class PUSH_SWAP_GUI(QtWidgets.QMainWindow):
-    def __init__(self):
+    def __init__(self, parent=None):
         super(PUSH_SWAP_GUI, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-
-        self.ui.action.triggered.connect(self.open_file)
-        self.ui.action_2.triggered.connect(self.save_file)
-        self.ui.action_3.triggered.connect(self.save_as_file)
-        self.ui.action_4.triggered.connect(self.settings)
-        self.ui.action_5.triggered.connect(self.start)
-        self.ui.action_6.triggered.connect(self.close_ps)
-
-        self.ui.pushButton.clicked.connect(self.start)
-        self.ui.pushButton_2.clicked.connect(self.close)
-
-        self.board = ps_board.StackBoard(self)
 
         self.CURRENT_THEME_WINDOW = ps_themes.DARK_WINDOW 
         self.CURRENT_THEME_FRAME  = ps_themes.DARK_FRAME
         self.CURRENT_THEME_BUTTON = ps_themes.DARK_BUTTON
         self.CURRENT_THEME_LINE   = ps_themes.DARK_LINE
-        self.set_theme('QMainWindow')
 
         self.dlg = None
         self.file_path = ""
